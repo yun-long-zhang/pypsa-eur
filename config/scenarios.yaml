@@ -11,21 +11,33 @@
 #   electricity:
 #       renewable_carriers: [wind, solar] # override the list of renewable carriers
 
-normal:
-  electricity:
-    renewable_carriers:
-    - solar
-    - onwind
-    - offwind-ac
-    - offwind-dc
-    - hydro
+S600C:
+  sector:
+    co2_sequestration_potential:
+      2050: 600
 
-no-offwind:
-  electricity:
-    renewable_carriers:
-    - solar
-    - onwind
-    - hydro
+
+# 0S800:
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 800
+
+# 0S1000:
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 1000
+
+# 0S1200:
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 1200
+
+# 0S1400:
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 1400
+
+    
 
    
 
