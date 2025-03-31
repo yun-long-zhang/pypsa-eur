@@ -43,8 +43,8 @@ scenario:
   ll:
   - vopt
   clusters:
-  #- 39
-  - 128
+  - 39
+  #- 128
   #- 256
   opts:
   - ''
@@ -54,7 +54,7 @@ scenario:
   # - 2020
   #- 2030
   # - 2040
-  - 2050
+  - 2020
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#countries
 countries: ['AL', 'AT', 'BA', 'BE', 'BG', 'CH', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'ME', 'MK', 'NL', 'NO', 'PL', 'PT', 'RO', 'RS', 'SE', 'SI', 'SK', 'XK']
@@ -83,7 +83,7 @@ co2_budget:
   2035: 0.150
   2040: 0.071
   2045: 0.032
-  2050: -0.10
+  2050: 0.000
 
   # CO2 budget as a fraction of 1990 emissions  46Gt
 # this is over-ridden if CO2Lx is set in sector_opts
@@ -382,7 +382,7 @@ energy:
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#biomass
 biomass:
-  year: 2050 #Year for which to retrieve biomass potential according to the assumptions of the JRC ENSPRESO .{2010, 2020, 2030, 2040, 2050}
+  year: 2020 #Year for which to retrieve biomass potential according to the assumptions of the JRC ENSPRESO .{2010, 2020, 2030, 2040, 2050}
   scenario: ENS_Med #{“ENS_Low”, “ENS_Med”, “ENS_High”}
   classes:
     solid biomass:
@@ -588,7 +588,7 @@ sector:
     2050: 0
   shipping_methanol_efficiency: 0.46
   shipping_oil_efficiency: 0.40
-  aviation_demand_factor: 1.7 #The proportion of demand for aviation compared to today’s consumption
+  aviation_demand_factor: 1.7 #1 for 2020, 1.2 for 2030, 1.7 for 2050The proportion of demand for aviation compared to today’s consumption
   HVC_demand_factor: 1.  #The proportion of demand for high-value chemicals compared to today’s consumption
   time_dep_hp_cop: true
   heat_pump_sink_T_individual_heating: 55.
@@ -658,7 +658,7 @@ sector:
     2035: 100
     2040: 200
     2045: 200
-    2050: 600
+    2050: 140  #140 for net-zero, 600 for -10%
   co2_sequestration_cost: 10  #EUR/tCO2 for transport and sequestration of CO2
   co2_sequestration_lifetime: 50  #The lifetime of a CO2 sequestration site
   co2_spatial: false  #Add option to spatially resolve carrier representing stored carbon dioxide. 
@@ -858,8 +858,8 @@ industry:
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#costs
 costs:
-  file: "resources/costs_2050.csv"  # 2 Update this to your specific cost file path
-  year: 2050
+  file: "resources/costs_2020.csv"  # 2 Update this to your specific cost file path
+  year: 2020
   version: v0.11.0 #vX.X.X or <user>/<repo>/vX.X.X; e.g. ‘v0.5.0’
   #Version of technology-data repository to use. If this string is of the form <user>/<repo>/<version> 
   #then costs are instead retrieved from github.com/<user>/<repo> at the <version> tag.
