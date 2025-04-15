@@ -588,7 +588,7 @@ sector:
     2050: 0
   shipping_methanol_efficiency: 0.46
   shipping_oil_efficiency: 0.40
-  aviation_demand_factor: 1.7 #1 for 2020, 1.2 for 2030, 1.7 for 2050The proportion of demand for aviation compared to today’s consumption
+  aviation_demand_factor: 1.0 #1 for 2020, 1.2 for 2030, 1.7 for 2050The proportion of demand for aviation compared to today’s consumption
   HVC_demand_factor: 1.  #The proportion of demand for high-value chemicals compared to today’s consumption
   time_dep_hp_cop: true
   heat_pump_sink_T_individual_heating: 55.
@@ -722,6 +722,7 @@ sector:
   gas_distribution_grid_cost_factor: 1.0   #multiplies cost in data/costs.csv
   biomass_spatial: true  #Add option for resolving biomass demand regionally
   biomass_transport: true  #Add option for transporting solid biomass between nodes
+  biomass_transport_costs_file: "resources/biomass_transport_costs.csv"
   biogas_upgrading_cc: true
   conventional_generation:  #a more detailed description of conventional carriers to detemine fuel consumption
     OCGT: gas

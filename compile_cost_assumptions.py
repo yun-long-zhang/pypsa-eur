@@ -1971,7 +1971,7 @@ def carbon_flow(costs,year):
             costs.loc[('electrobiofuels', 'C in fuel'), 'source'] = 'Stoichiometric calculation'
 
             costs.loc[('electrobiofuels', 'efficiency-biomass'), 'value'] = costs.loc[('electrobiofuels', 'C in fuel'), 'value'] \
-                                                                            * input_CO2_intensity / oil_CO2_intensity
+                                                                            * input_CO2_intensity / oil_CO2_intensity  #FT_fuel_total/biomass_input
             costs.loc[('electrobiofuels', 'efficiency-biomass'), 'unit'] = 'per unit'
             costs.loc[('electrobiofuels', 'efficiency-biomass'), 'source'] = 'Stoichiometric calculation'
 
@@ -1979,13 +1979,13 @@ def carbon_flow(costs,year):
             efuel_scale_factor = costs.loc[('BtL', 'C stored'), 'value']* costs.loc[('Fischer-Tropsch', 'capture rate'), 'value']
 
             costs.loc[('electrobiofuels', 'efficiency-hydrogen'), 'value'] = costs.loc[('Fischer-Tropsch', 'efficiency'), 'value']\
-                                                                             / efuel_scale_factor
+                                                                             / efuel_scale_factor  #FT_fuel_total/H2_input
             costs.loc[('electrobiofuels', 'efficiency-hydrogen'), 'unit'] = 'per unit'
             costs.loc[('electrobiofuels', 'efficiency-hydrogen'), 'source'] = 'Stoichiometric calculation'
 
             costs.loc[('electrobiofuels', 'efficiency-tot'), 'value'] = (1 /
                                                                          (1 / costs.loc[('electrobiofuels', 'efficiency-hydrogen'), 'value'] +
-                                                                          1 / costs.loc[('electrobiofuels', 'efficiency-biomass'), 'value']))
+                                                                          1 / costs.loc[('electrobiofuels', 'efficiency-biomass'), 'value']))   #FT_fuel_total/(H2_input
             costs.loc[('electrobiofuels', 'efficiency-tot'), 'unit'] = 'per unit'
             costs.loc[('electrobiofuels', 'efficiency-tot'), 'source'] = 'Stoichiometric calculation'
 
