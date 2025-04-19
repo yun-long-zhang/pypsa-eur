@@ -1996,6 +1996,80 @@ def carbon_flow(costs,year):
             currency_year = costs.loc[('Fischer-Tropsch', 'investment'), "currency_year"]
             source = "combination of BtL and electrofuels"
 
+        elif tech in ['e-biomethanol']:
+
+            input_CO2_intensity = costs.loc[('solid biomass', 'CO2 intensity'), 'value']
+            oil_CO2_intensity = costs.loc[('oil', 'CO2 intensity'), 'value']
+
+            costs.loc[('e-biomethanol', 'C in fuel'), 'value'] = (costs.loc[('BtL', 'C in fuel'), 'value']
+                                                                    + costs.loc[('BtL', 'C stored'), 'value']
+                                                                    * costs.loc[('Fischer-Tropsch', 'capture rate'), 'value'])
+            costs.loc[('e-biomethanol', 'C in fuel'), 'unit'] = 'per unit'
+            costs.loc[('e-biomethanol', 'C in fuel'), 'source'] = 'Stoichiometric calculation'
+
+            costs.loc[('e-biomethanol', 'efficiency-biomass'), 'value'] = costs.loc[('e-biomethanol', 'C in fuel'), 'value'] \
+                                                                            * input_CO2_intensity / oil_CO2_intensity  #FT_fuel_total/biomass_input
+            costs.loc[('e-biomethanol', 'efficiency-biomass'), 'unit'] = 'per unit'
+            costs.loc[('e-biomethanol', 'efficiency-biomass'), 'source'] = 'Stoichiometric calculation'
+
+
+            efuel_scale_factor = costs.loc[('BtL', 'C stored'), 'value']* costs.loc[('Fischer-Tropsch', 'capture rate'), 'value']
+
+            costs.loc[('e-biomethanol', 'efficiency-hydrogen'), 'value'] = costs.loc[('Fischer-Tropsch', 'efficiency'), 'value']\
+                                                                             / efuel_scale_factor  #FT_fuel_total/H2_input
+            costs.loc[('e-biomethanol', 'efficiency-hydrogen'), 'unit'] = 'per unit'
+            costs.loc[('e-biomethanol', 'efficiency-hydrogen'), 'source'] = 'Stoichiometric calculation'
+
+            costs.loc[('e-biomethanol', 'efficiency-tot'), 'value'] = (1 /
+                                                                         (1 / costs.loc[('e-biomethanol', 'efficiency-hydrogen'), 'value'] +
+                                                                          1 / costs.loc[('e-biomethanol', 'efficiency-biomass'), 'value']))   #FT_fuel_total/(H2_input
+            costs.loc[('e-biomethanol', 'efficiency-tot'), 'unit'] = 'per unit'
+            costs.loc[('e-biomethanol', 'efficiency-tot'), 'source'] = 'Stoichiometric calculation'
+
+            inv_cost = btl_cost[year] + costs.loc[('Fischer-Tropsch', 'investment'), 'value'] * efuel_scale_factor
+            VOM = costs.loc[('BtL', 'VOM'), 'value'] + costs.loc[('Fischer-Tropsch', 'VOM'), 'value'] * efuel_scale_factor
+            FOM = costs.loc[('BtL', 'FOM'), 'value']
+            medium_out = 'oil'
+            currency_year = costs.loc[('Fischer-Tropsch', 'investment'), "currency_year"]
+            source = "combination of biomass-to-methanol and electrofuels"
+
+        elif tech in ['e-biosng']:
+
+            input_CO2_intensity = costs.loc[('solid biomass', 'CO2 intensity'), 'value']
+            oil_CO2_intensity = costs.loc[('oil', 'CO2 intensity'), 'value']
+
+            costs.loc[('e-biosng', 'C in fuel'), 'value'] = (costs.loc[('BtL', 'C in fuel'), 'value']
+                                                                    + costs.loc[('BtL', 'C stored'), 'value']
+                                                                    * costs.loc[('Fischer-Tropsch', 'capture rate'), 'value'])
+            costs.loc[('e-biosng', 'C in fuel'), 'unit'] = 'per unit'
+            costs.loc[('e-biosng', 'C in fuel'), 'source'] = 'Stoichiometric calculation'
+
+            costs.loc[('e-biosng', 'efficiency-biomass'), 'value'] = costs.loc[('e-biosng', 'C in fuel'), 'value'] \
+                                                                            * input_CO2_intensity / oil_CO2_intensity  #FT_fuel_total/biomass_input
+            costs.loc[('e-biosng', 'efficiency-biomass'), 'unit'] = 'per unit'
+            costs.loc[('e-biosng', 'efficiency-biomass'), 'source'] = 'Stoichiometric calculation'
+
+
+            efuel_scale_factor = costs.loc[('BtL', 'C stored'), 'value']* costs.loc[('Fischer-Tropsch', 'capture rate'), 'value']
+
+            costs.loc[('e-biosng', 'efficiency-hydrogen'), 'value'] = costs.loc[('Fischer-Tropsch', 'efficiency'), 'value']\
+                                                                             / efuel_scale_factor  #FT_fuel_total/H2_input
+            costs.loc[('e-biosng', 'efficiency-hydrogen'), 'unit'] = 'per unit'
+            costs.loc[('e-biosng', 'efficiency-hydrogen'), 'source'] = 'Stoichiometric calculation'
+
+            costs.loc[('e-biosng', 'efficiency-tot'), 'value'] = (1 /
+                                                                         (1 / costs.loc[('e-biosng', 'efficiency-hydrogen'), 'value'] +
+                                                                          1 / costs.loc[('e-biosng', 'efficiency-biomass'), 'value']))   #FT_fuel_total/(H2_input
+            costs.loc[('e-biosng', 'efficiency-tot'), 'unit'] = 'per unit'
+            costs.loc[('e-biosng', 'efficiency-tot'), 'source'] = 'Stoichiometric calculation'
+
+            inv_cost = btl_cost[year] + costs.loc[('Fischer-Tropsch', 'investment'), 'value'] * efuel_scale_factor
+            VOM = costs.loc[('BtL', 'VOM'), 'value'] + costs.loc[('Fischer-Tropsch', 'VOM'), 'value'] * efuel_scale_factor
+            FOM = costs.loc[('BtL', 'FOM'), 'value']
+            medium_out = 'oil'
+            currency_year = costs.loc[('Fischer-Tropsch', 'investment'), "currency_year"]
+            source = "combination of bioSNG and electrofuels"
+
         elif tech in ['biogas', 'biogas CC', 'biogas plus hydrogen']:
             CH4_density = 0.657 #kg/Nm3
             CO2_density = 1.98 #kg/Nm3

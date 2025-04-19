@@ -684,6 +684,7 @@ sector:
       allam: true  #Add Allam cycle gas power plants using methanol
     biomass_to_methanol: true
     biomass_to_methanol_cc: true
+    e_biomethanol: true
   ammonia: true  # can be false (no NH3 carrier), true (copperplated NH3), "regional" (regionalised NH3 without network)
   min_part_load_fischer_tropsch: 0.5  #The minimum unit dispatch (p_min_pu) for the Fischer-Tropsch process
   min_part_load_methanolisation: 0.3 #The minimum unit dispatch (p_min_pu) for the methanolisation process
@@ -734,6 +735,7 @@ sector:
   biomass_to_liquid: true #Add option for transforming solid biomass into liquid fuel with the same properties as oil
   biomass_to_liquid_cc: true
   electrobiofuels: true
+  e_bioSNG: true
   biosng: true #Add option for transforming solid biomass into synthesis gas with the same properties as natural gas
   biosng_cc: true
   bioH2: true #Add option for transforming solid biomass into hydrogen with carbon capture
@@ -1332,6 +1334,8 @@ plotting:
     methanolisation: '#00FFBF'
     biomass-to-methanol: '#EAD28A'
     biomass-to-methanol CC: '#EADBAD'
+    e-biomethanol: '#ffd966'
+    e-bioSNG: '#66ffcc'
     allam methanol: '#B98F76'
     CCGT methanol: '#B98F76'
     CCGT methanol CC: '#a87f69'

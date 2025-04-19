@@ -56,18 +56,19 @@
 #       2025: 0
 
 
-n00-2050-HF-CF-B-140-50h-mid-39nodes-with-ebfuel:  
-  #countries: ['SE']
-  co2_budget:
-    2050: 0.000
-  sector:
-    H2_network: false
-    H2_retrofit: false
-    co2_network: false
-    electrobiofuels: true
-    co2_sequestration_potential:
-      2050: 140
-n10-2050-HF-CF-B-600-50h-mid-39nodes-with-ebfuel:  
+# n00-2050-HF-CF-B-140-50h-mid-39nodes-with-ebfuel:  
+#   #countries: ['SE']
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     H2_network: false
+#     H2_retrofit: false
+#     co2_network: false
+#     electrobiofuels: true
+#     co2_sequestration_potential:
+#       2050: 140
+#n10-2050-HF-CF-B-600-50h-mid-39nodes-with-ebfuel: 
+T1: 
   #countries: ['SE']
   co2_budget:
     2050: -0.100
@@ -79,41 +80,41 @@ n10-2050-HF-CF-B-600-50h-mid-39nodes-with-ebfuel:
     co2_sequestration_potential:
       2050: 600
 
-n10-2050-HF-CF-B-800-50h-mid-39nodes-with-ebfuel:  
-  #countries: ['SE']
-  co2_budget:
-    2050: -0.100
-  sector:
-    H2_network: false
-    H2_retrofit: false
-    co2_network: false
-    electrobiofuels: true
-    co2_sequestration_potential:
-      2050: 800
+# n10-2050-HF-CF-B-800-50h-mid-39nodes-with-ebfuel:  
+#   #countries: ['SE']
+#   co2_budget:
+#     2050: -0.100
+#   sector:
+#     H2_network: false
+#     H2_retrofit: false
+#     co2_network: false
+#     electrobiofuels: true
+#     co2_sequestration_potential:
+#       2050: 800
 
-n10-2050-HF-CF-B-1000-50h-mid-39nodes-with-ebfuel:  
-  #countries: ['SE']
-  co2_budget:
-    2050: -0.100
-  sector:
-    H2_network: false
-    H2_retrofit: false
-    co2_network: false
-    electrobiofuels: true
-    co2_sequestration_potential:
-      2050: 1000
+# n10-2050-HF-CF-B-1000-50h-mid-39nodes-with-ebfuel:  
+#   #countries: ['SE']
+#   co2_budget:
+#     2050: -0.100
+#   sector:
+#     H2_network: false
+#     H2_retrofit: false
+#     co2_network: false
+#     electrobiofuels: true
+#     co2_sequestration_potential:
+#       2050: 1000
   
-n10-2050-HF-CF-B-1200-50h-mid-39nodes-with-ebfuel:  
-  #countries: ['SE']
-  co2_budget:
-    2050: -0.100
-  sector:
-    H2_network: false
-    H2_retrofit: false
-    co2_network: false
-    electrobiofuels: true
-    co2_sequestration_potential:
-      2050: 1200
+# n10-2050-HF-CF-B-1200-50h-mid-39nodes-with-ebfuel:  
+#   #countries: ['SE']
+#   co2_budget:
+#     2050: -0.100
+#   sector:
+#     H2_network: false
+#     H2_retrofit: false
+#     co2_network: false
+#     electrobiofuels: true
+#     co2_sequestration_potential:
+#       2050: 1200
     
 
   
