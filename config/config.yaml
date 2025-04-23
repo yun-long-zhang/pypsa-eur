@@ -70,7 +70,7 @@ snapshots:
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#enable
 enable:
-  retrieve: auto
+  retrieve: false
   retrieve_databundle: true
   retrieve_cost_data: false
   build_cutout: false
@@ -118,7 +118,8 @@ electricity:
     Store: [battery, H2]
     Link: [] # H2 pipeline
 
-  powerplants_filter: (DateOut >= 2024 or DateOut != DateOut) and not (Country == 'Germany' and Fueltype == 'Nuclear')
+  #powerplants_filter: (DateOut >= 2024 or DateOut != DateOut) and not (Country == 'Germany' and Fueltype == 'Nuclear')
+  powerplants_filter: (DateOut >= 2050 or DateOut != DateOut) and not (Country in ['Germany', 'Switzerland', 'Austria', 'Belgium'] and Fueltype == 'Nuclear')
   custom_powerplants: false
   everywhere_powerplants: []
 
@@ -168,7 +169,7 @@ renewable:
       smooth: false   #Switch to apply a gaussian kernel density smoothing to the power curve.
       add_cutout_windspeed: true
     resource_classes: 1
-    capacity_per_sqkm: 3  #Allowable density of wind turbine placement.
+    capacity_per_sqkm: 1.2  #Allowable density of wind turbine placement.  NE paper
     # correction_factor: 0.93
     corine:
       grid_codes: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 31, 32]
@@ -190,7 +191,7 @@ renewable:
       smooth: false #Switch to apply a gaussian kernel density smoothing to the power curve.
       add_cutout_windspeed: true
     resource_classes: 1
-    capacity_per_sqkm: 3  #Allowable density of wind turbine placement. ScholzPhd Tab 4.3.1: 10MW/km^2 and assuming 30% fraction of the already restricted area is available for installation of wind generators due to competing land use and likely public acceptance issues.
+    capacity_per_sqkm: 2  #Allowable density of wind turbine placement. ScholzPhd Tab 4.3.1: 10MW/km^2 and assuming 30% fraction of the already restricted area is available for installation of wind generators due to competing land use and likely public acceptance issues.
     correction_factor: 0.8855  #Correction factor for capacity factor time series.
     corine: [44, 255]
     luisa: false # [0, 5230]
@@ -638,7 +639,7 @@ sector:
     central: 180
   boilers: true #Add option for transforming gas into heat using gas boilers
   resistive_heaters: true
-  oil_boilers: false #Add option for transforming oil into heat using boilers
+  oil_boilers: true #Add option for transforming oil into heat using boilers
   biomass_boiler: true
   overdimension_heat_generators:
     decentral: 1.1  #to cover demand peaks bigger than data
@@ -676,7 +677,7 @@ sector:
     - conservative estimate GAS Mt
     - conservative estimate OIL Mt
     - conservative estimate aquifer Mt
-    include_onshore: false
+    include_onshore: true
     min_size: 3 #Any sites with lower potential than this value will be excluded
     max_size: 25 #The maximum sequestration potential for any one site.
     years_of_storage: 25
@@ -693,7 +694,7 @@ sector:
   co2_spatial: true  #Add option to spatially resolve carrier representing stored carbon dioxide. 
   #This allows for more detailed modelling of CCUTS, e.g. regarding the capturing of industrial process emissions, 
   #usage as feedstock for electrofuels, transport of carbon dioxide, and geological sequestration sites.
-  co2_network: true     #Add option for planning a new carbon dioxide transmission network
+  co2_network: false     #Add option for planning a new carbon dioxide transmission network
   co2_network_cost_factor: 1 #The cost factor for the capital cost of the carbon dioxide transmission network
   cc_fraction: 0.9 #The default fraction of CO2 captured with post-combustion capture
   hydrogen_underground_storage: true  #Add options for storing hydrogen underground. Storage potential depends regionally.
@@ -744,10 +745,10 @@ sector:
       compression_per_1000km: 0.01
     electricity distribution grid:
       efficiency_static: 0.97
-  H2_network: true
+  H2_network: false
   gas_network: true #Add existing natural gas infrastructure, incl. LNG terminals, production and entry-points.
                     #When activated, all the gas demands are regionally disaggregated as well.
-  H2_retrofit: true  # if set to True existing gas pipes can be retrofitted to H2 pipes
+  H2_retrofit: false  # if set to True existing gas pipes can be retrofitted to H2 pipes
   # according to hydrogen backbone strategy (April, 2020) p.15
   # https://gasforclimate2050.eu/wp-content/uploads/2020/07/2020_European-Hydrogen-Backbone_Report.pdf
   # 60% of original natural gas capacity could be used in cost-optimal case as H2 capacity
