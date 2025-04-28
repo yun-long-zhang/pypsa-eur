@@ -153,7 +153,7 @@ rule create_scenarios:
     output:
         config["run"]["scenarios"]["file"],
     conda:
-        "envs/environment.yaml"
+        "envs/retrieve.yaml"
     script:
         "config/create_scenarios.py"
 

@@ -22,66 +22,74 @@
 #     co2_sequestration_potential:
 #       2030: 0
 
-# n30-2030-HT-CF-B-0-50h-mid-39nodes-no-ebfuel:  
-#   #countries: ['SE']
-  
-#   sector:
-#     H2_network: true
-#     H2_retrofit: true
-#     co2_network: false
-#     electrobiofuels: false
-#     co2_sequestration_potential:
-#       2030: 0
 
-# n52-2025-HT-CF-B-0-50h-mid-39nodes-with-ebfuel:  
-#   #countries: ['SE']
-  
-#   sector:
-#     H2_network: true
-#     H2_retrofit: true
-#     co2_network: false
-#     electrobiofuels: true
-#     co2_sequestration_potential:
-#       2025: 0
-
-# n52-2025-HT-CF-B-0-50h-mid-39nodes-no-ebfuel:  
-#   #countries: ['SE']
-  
-#   sector:
-#     H2_network: true
-#     H2_retrofit: true
-#     co2_network: false
-#     electrobiofuels: false
-#     co2_sequestration_potential:
-#       2025: 0
-
-
-# n00-2050-HF-CF-B-140-50h-mid-39nodes-with-ebfuel:  
-#   #countries: ['SE']
-#   co2_budget:
-#     2050: 0.000
-#   sector:
-#     H2_network: false
-#     H2_retrofit: false
-#     co2_network: false
-#     electrobiofuels: true
-#     co2_sequestration_potential:
-#       2050: 140
-#n10-2050-HF-CF-B-600-50h-mid-39nodes-with-ebfuel: 
-yl_ym_ys_nonetworks: 
+nl-nm-ns-yynetwork-00-140: 
   #countries: ['SE']
   co2_budget:
-    2050: -0.100
+    2050: 0.000
   sector:
-    H2_network: false
-    H2_retrofit: false
-    co2_network: false
-    electrobiofuels: true
-    e_bioSNG: true
-    methanol:
-      e_biomethanol: true
+    co2_sequestration_potential:
+      2050: 140
+nl-nm-ns-ynetwork-10-600: 
+  #countries: ['SE']
+  co2_budget:
+    2050: -0.10
+  sector:
     co2_sequestration_potential:
       2050: 600
+nl-nm-ns-ynetwork-10-700: 
+  #countries: ['SE']
+  co2_budget:
+    2050: -0.10
+  sector:
+    co2_sequestration_potential:
+      2050: 700
+nl-nm-ns-ynetwork-10-800: 
+  #countries: ['SE']
+  co2_budget:
+    2050: -0.10
+  sector:
+    co2_sequestration_potential:
+      2050: 800
+nl-nm-ns-ynetwork-10-900: 
+  #countries: ['SE']
+  co2_budget:
+    2050: -0.10
+  sector:
+    co2_sequestration_potential:
+      2050: 900
+nl-nm-ns-ynetwork-10-1000: 
+  #countries: ['SE']
+  co2_budget:
+    2050: -0.10
+  sector:
+    co2_sequestration_potential:
+      2050: 1000
+nl-nm-ns-ynetwork-10-1100: 
+  #countries: ['SE']
+  co2_budget:
+    2050: -0.10
+  sector:
+    co2_sequestration_potential:
+      2050: 1100
+nl-nm-ns-ynetwork-10-1200: 
+  #countries: ['SE']
+  co2_budget:
+    2050: -0.10
+  sector:
+    co2_sequestration_potential:
+      2050: 1200
+# yl-ym-ys-10-1200: 
+#   #countries: ['SE']
+#   co2_budget:
+#     2050: -0.100
+#   sector:
+#     electrobiofuels: true
+#     e_bioSNG: true
+#     methanol:
+#       e_biomethanol: true
+#     co2_sequestration_potential:
+#       2050: 1200
 # nl_nm_ns_nonetworks: 
 #   #countries: ['SE']
 #   co2_budget:
