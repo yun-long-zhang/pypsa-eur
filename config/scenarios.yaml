@@ -23,62 +23,65 @@
 #       2030: 0
 
 
-nl-nm-ns-yynetwork-00-140: 
+yl-ym-ys-ynetwork-1.5Biotran2-00-140: 
   #countries: ['SE']
   co2_budget:
     2050: 0.000
   sector:
     co2_sequestration_potential:
       2050: 140
-nl-nm-ns-ynetwork-10-600: 
+yl-ym-ys-ynetwork-1.5Biotran2-10-600: 
   #countries: ['SE']
   co2_budget:
     2050: -0.10
   sector:
     co2_sequestration_potential:
       2050: 600
-nl-nm-ns-ynetwork-10-700: 
+yl-ym-ys-ynetwork-1.5Biotran2-10-700: 
   #countries: ['SE']
   co2_budget:
     2050: -0.10
   sector:
     co2_sequestration_potential:
       2050: 700
-nl-nm-ns-ynetwork-10-800: 
+yl-ym-ys-ynetwork-1.5Biotran2-10-800: 
   #countries: ['SE']
   co2_budget:
     2050: -0.10
   sector:
     co2_sequestration_potential:
       2050: 800
-nl-nm-ns-ynetwork-10-900: 
+yl-ym-ys-ynetwork-1.5Biotran2-10-900: 
   #countries: ['SE']
   co2_budget:
     2050: -0.10
   sector:
     co2_sequestration_potential:
       2050: 900
-nl-nm-ns-ynetwork-10-1000: 
+yl-ym-ys-ynetwork-1.5Biotran2-10-1000: 
   #countries: ['SE']
   co2_budget:
     2050: -0.10
   sector:
     co2_sequestration_potential:
       2050: 1000
-nl-nm-ns-ynetwork-10-1100: 
+yl-ym-ys-ynetwork-1.5Biotran2-10-1100: 
   #countries: ['SE']
   co2_budget:
     2050: -0.10
   sector:
     co2_sequestration_potential:
       2050: 1100
-nl-nm-ns-ynetwork-10-1200: 
+yl-ym-ys-ynetwork-1.5Biotran2-10-1200: 
   #countries: ['SE']
   co2_budget:
     2050: -0.10
   sector:
     co2_sequestration_potential:
       2050: 1200
+
+
+
 # yl-ym-ys-10-1200: 
 #   #countries: ['SE']
 #   co2_budget:

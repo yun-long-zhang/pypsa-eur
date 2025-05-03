@@ -2052,7 +2052,7 @@ def add_storage_and_grids(
             p_nom_extendable=True,
             length=h2_pipes.length.values,
             capital_cost=costs.at["H2 (g) pipeline", "capital_cost"]
-            * h2_pipes.length.values,
+            * h2_pipes.length.values,  #1.5 fold
             carrier="H2 pipeline",
             lifetime=costs.at["H2 (g) pipeline", "lifetime"],
         )
