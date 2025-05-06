@@ -1030,7 +1030,7 @@ def add_e_biomethanol(n, costs):
         efficiency3=-costs.at["solid biomass", "CO2 intensity"] + costs.at["solid biomass", "CO2 intensity"]*(1-costs.at["e-biomethanol", "C in fuel"]),
         p_nom_extendable=True,
         capital_cost=costs.at["biomass-to-methanol", "capital_cost"]
-        * costs.at["biomass-to-methanol", "efficiency"],
+        * costs.at["biomass-to-methanol", "efficiency"] * 1,
         marginal_cost=costs.loc["biomass-to-methanol", "VOM"]
         * costs.at["biomass-to-methanol", "efficiency"],
     )
@@ -4175,7 +4175,7 @@ def add_biomass(
             efficiency3=-costs.at["solid biomass", "CO2 intensity"] + costs.at["solid biomass", "CO2 intensity"]*(1-costs.at["electrobiofuels", "C in fuel"]),
             #efficiency3=-costs.at["solid biomass", "CO2 intensity"]* costs.at["electrobiofuels", "C in fuel"],
             p_nom_extendable=True,
-            capital_cost=costs.at["BtL", "capital_cost"] * costs.at["BtL", "efficiency"],
+            capital_cost=costs.at["BtL", "capital_cost"] * costs.at["BtL", "efficiency"] * 1,
             
             marginal_cost=costs.at["BtL", "VOM"] * costs.at["BtL", "efficiency"],
             
@@ -4259,7 +4259,7 @@ def add_biomass(
             efficiency3=-costs.at["solid biomass", "CO2 intensity"] + costs.at["solid biomass", "CO2 intensity"]*(1-costs.at["e-bioSNG", "C in fuel"]),
             #efficiency3=-costs.at["solid biomass", "CO2 intensity"]* costs.at["electrobiofuels", "C in fuel"],
             p_nom_extendable=True,
-            capital_cost=costs.at["BioSNG", "capital_cost"] * costs.at["BioSNG", "efficiency"],
+            capital_cost=costs.at["BioSNG", "capital_cost"] * costs.at["BioSNG", "efficiency"] * 1,
             marginal_cost=costs.at["BioSNG", "VOM"] * costs.at["BioSNG", "efficiency"],
         )
 
