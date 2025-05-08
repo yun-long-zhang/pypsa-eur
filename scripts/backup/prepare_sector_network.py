@@ -1030,7 +1030,7 @@ def add_e_biomethanol(n, costs):
         efficiency3=-costs.at["solid biomass", "CO2 intensity"] + costs.at["solid biomass", "CO2 intensity"]*(1-costs.at["e-biomethanol", "C in fuel"]),
         p_nom_extendable=True,
         capital_cost=costs.at["biomass-to-methanol", "capital_cost"]
-        * costs.at["biomass-to-methanol", "efficiency"] * 1.3,
+        * costs.at["biomass-to-methanol", "efficiency"] * 1,
         marginal_cost=costs.loc["biomass-to-methanol", "VOM"]
         * costs.at["biomass-to-methanol", "efficiency"],
     )
@@ -4175,7 +4175,7 @@ def add_biomass(
             efficiency3=-costs.at["solid biomass", "CO2 intensity"] + costs.at["solid biomass", "CO2 intensity"]*(1-costs.at["electrobiofuels", "C in fuel"]),
             #efficiency3=-costs.at["solid biomass", "CO2 intensity"]* costs.at["electrobiofuels", "C in fuel"],
             p_nom_extendable=True,
-            capital_cost=costs.at["BtL", "capital_cost"] * costs.at["BtL", "efficiency"] * 1.3,
+            capital_cost=costs.at["BtL", "capital_cost"] * costs.at["BtL", "efficiency"] * 1,
             
             marginal_cost=costs.at["BtL", "VOM"] * costs.at["BtL", "efficiency"],
             
@@ -4259,7 +4259,7 @@ def add_biomass(
             efficiency3=-costs.at["solid biomass", "CO2 intensity"] + costs.at["solid biomass", "CO2 intensity"]*(1-costs.at["e-bioSNG", "C in fuel"]),
             #efficiency3=-costs.at["solid biomass", "CO2 intensity"]* costs.at["electrobiofuels", "C in fuel"],
             p_nom_extendable=True,
-            capital_cost=costs.at["BioSNG", "capital_cost"] * costs.at["BioSNG", "efficiency"] * 1.3,
+            capital_cost=costs.at["BioSNG", "capital_cost"] * costs.at["BioSNG", "efficiency"] * 1,
             marginal_cost=costs.at["BioSNG", "VOM"] * costs.at["BioSNG", "efficiency"],
         )
 
@@ -4358,7 +4358,8 @@ def add_low_t_industry(n, nodes, industrial_demand, costs, must_run):
             efficiency2=-costs.at["solid biomass", "CO2 intensity"]
             * costs.at["biomass CHP capture", "capture_rate"],
             efficiency3=costs.at["solid biomass", "CO2 intensity"]
-            * costs.at["biomass CHP capture", "capture_rate"],
+            * (1 - costs.at["biomass CHP capture", "capture_rate"])
+            - costs.at["solid biomass", "CO2 intensity"],
             lifetime=costs.at["solid biomass boiler steam CC", "lifetime"],
         )
 
@@ -5464,172 +5465,131 @@ def add_shipping(
     all_navigation = domestic_navigation + international_navigation
     p_set = all_navigation * 1e6 / nhours
 
-    if options["endogenous_shipping"]:
-        n.add(
-            "Bus",
-            "EU shipping",
-            carrier="shipping",
-            location="EU",
-            unit="MWh",
+    if shipping_hydrogen_share:
+        oil_efficiency = options.get(
+            "shipping_oil_efficiency", options.get("shipping_average_efficiency", 0.4)
         )
-        # only consider eu wide shipping and no reginal shipping demand, shipping demand in MWh_oil
+        efficiency = oil_efficiency / costs.at["fuel cell", "efficiency"]
+        shipping_hydrogen_share = get(
+            options["shipping_hydrogen_share"], investment_year
+        )
+
+        if options["shipping_hydrogen_liquefaction"]:
+            n.add(
+                "Bus",
+                nodes,
+                suffix=" H2 liquid",
+                carrier="H2 liquid",
+                location=nodes,
+                unit="MWh_LHV",
+            )
+
+            n.add(
+                "Link",
+                nodes + " H2 liquefaction",
+                bus0=nodes + " H2",
+                bus1=nodes + " H2 liquid",
+                carrier="H2 liquefaction",
+                efficiency=costs.at["H2 liquefaction", "efficiency"],
+                capital_cost=costs.at["H2 liquefaction", "capital_cost"],
+                p_nom_extendable=True,
+                lifetime=costs.at["H2 liquefaction", "lifetime"],
+            )
+
+            shipping_bus = nodes + " H2 liquid"
+        else:
+            shipping_bus = nodes + " H2"
+
+        efficiency = (
+            options["shipping_oil_efficiency"] / costs.at["fuel cell", "efficiency"]
+        )
+        p_set_hydrogen = shipping_hydrogen_share * p_set * efficiency
+
         n.add(
             "Load",
-            "EU shipping demand",
-            bus="EU shipping",
-            carrier="shipping",
-            p_set=p_set.sum(),
+            nodes,
+            suffix=" H2 for shipping",
+            bus=shipping_bus,
+            carrier="H2 for shipping",
+            p_set=p_set_hydrogen,
+        )
+
+    if shipping_methanol_share:
+        efficiency = (
+            options["shipping_oil_efficiency"] / options["shipping_methanol_efficiency"]
+        )
+
+        p_set_methanol_shipping = (
+            shipping_methanol_share
+            * p_set.rename(lambda x: x + " shipping methanol")
+            * efficiency
+        )
+
+        if not options["methanol"]["regional_methanol_demand"]:
+            p_set_methanol_shipping = p_set_methanol_shipping.sum()
+
+        n.add(
+            "Bus",
+            spatial.methanol.shipping,
+            location=spatial.methanol.demand_locations,
+            carrier="shipping methanol",
+            unit="MWh_LHV",
+        )
+
+        n.add(
+            "Load",
+            spatial.methanol.shipping,
+            bus=spatial.methanol.shipping,
+            carrier="shipping methanol",
+            p_set=p_set_methanol_shipping,
         )
 
         n.add(
             "Link",
-            spatial.methanol.nodes,
+            spatial.methanol.shipping,
             bus0=spatial.methanol.nodes,
-            bus1="EU shipping",
+            bus1=spatial.methanol.shipping,
             bus2="co2 atmosphere",
             carrier="shipping methanol",
             p_nom_extendable=True,
-            efficiency=options["shipping_methanol_efficiency"]
-            / options["shipping_oil_efficiency"],
-            efficiency2=costs.at["methanol", "CO2 intensity"],
+            efficiency2=1
+            / options[
+                "MWh_MeOH_per_tCO2"
+            ],  # CO2 intensity methanol based on stoichiometric calculation with 22.7 GJ/t methanol (32 g/mol), CO2 (44 g/mol), 277.78 MWh/TJ = 0.218 t/MWh
+        )
+
+    if shipping_oil_share:
+        p_set_oil = shipping_oil_share * p_set.rename(lambda x: x + " shipping oil")
+
+        if not options["regional_oil_demand"]:
+            p_set_oil = p_set_oil.sum()
+
+        n.add(
+            "Bus",
+            spatial.oil.shipping,
+            location=spatial.oil.demand_locations,
+            carrier="shipping oil",
+            unit="MWh_LHV",
+        )
+
+        n.add(
+            "Load",
+            spatial.oil.shipping,
+            bus=spatial.oil.shipping,
+            carrier="shipping oil",
+            p_set=p_set_oil,
         )
 
         n.add(
             "Link",
             spatial.oil.shipping,
             bus0=spatial.oil.nodes,
-            bus1="EU shipping",
+            bus1=spatial.oil.shipping,
             bus2="co2 atmosphere",
             carrier="shipping oil",
             p_nom_extendable=True,
             efficiency2=costs.at["oil", "CO2 intensity"],
         )
-    else:    
-        if shipping_hydrogen_share:
-            oil_efficiency = options.get(
-                "shipping_oil_efficiency", options.get("shipping_average_efficiency", 0.4)
-            )
-            efficiency = oil_efficiency / costs.at["fuel cell", "efficiency"]
-            shipping_hydrogen_share = get(
-                options["shipping_hydrogen_share"], investment_year
-            )
-
-            if options["shipping_hydrogen_liquefaction"]:
-                n.add(
-                    "Bus",
-                    nodes,
-                    suffix=" H2 liquid",
-                    carrier="H2 liquid",
-                    location=nodes,
-                    unit="MWh_LHV",
-                )
-
-                n.add(
-                    "Link",
-                    nodes + " H2 liquefaction",
-                    bus0=nodes + " H2",
-                    bus1=nodes + " H2 liquid",
-                    carrier="H2 liquefaction",
-                    efficiency=costs.at["H2 liquefaction", "efficiency"],
-                    capital_cost=costs.at["H2 liquefaction", "capital_cost"],
-                    p_nom_extendable=True,
-                    lifetime=costs.at["H2 liquefaction", "lifetime"],
-                )
-
-                shipping_bus = nodes + " H2 liquid"
-            else:
-                shipping_bus = nodes + " H2"
-
-            efficiency = (
-                options["shipping_oil_efficiency"] / costs.at["fuel cell", "efficiency"]
-            )
-            p_set_hydrogen = shipping_hydrogen_share * p_set * efficiency
-
-            n.add(
-                "Load",
-                nodes,
-                suffix=" H2 for shipping",
-                bus=shipping_bus,
-                carrier="H2 for shipping",
-                p_set=p_set_hydrogen,
-            )
-
-        if shipping_methanol_share:
-            efficiency = (
-                options["shipping_oil_efficiency"] / options["shipping_methanol_efficiency"]
-            )
-
-            p_set_methanol_shipping = (
-                shipping_methanol_share
-                * p_set.rename(lambda x: x + " shipping methanol")
-                * efficiency
-            )
-
-            if not options["methanol"]["regional_methanol_demand"]:
-                p_set_methanol_shipping = p_set_methanol_shipping.sum()
-
-            n.add(
-                "Bus",
-                spatial.methanol.shipping,
-                location=spatial.methanol.demand_locations,
-                carrier="shipping methanol",
-                unit="MWh_LHV",
-            )
-
-            n.add(
-                "Load",
-                spatial.methanol.shipping,
-                bus=spatial.methanol.shipping,
-                carrier="shipping methanol",
-                p_set=p_set_methanol_shipping,
-            )
-
-            n.add(
-                "Link",
-                spatial.methanol.shipping,
-                bus0=spatial.methanol.nodes,
-                bus1=spatial.methanol.shipping,
-                bus2="co2 atmosphere",
-                carrier="shipping methanol",
-                p_nom_extendable=True,
-                efficiency2=1
-                / options[
-                    "MWh_MeOH_per_tCO2"
-                ],  # CO2 intensity methanol based on stoichiometric calculation with 22.7 GJ/t methanol (32 g/mol), CO2 (44 g/mol), 277.78 MWh/TJ = 0.218 t/MWh
-            )
-
-        if shipping_oil_share:
-            p_set_oil = shipping_oil_share * p_set.rename(lambda x: x + " shipping oil")
-
-            if not options["regional_oil_demand"]:
-                p_set_oil = p_set_oil.sum()
-
-            n.add(
-                "Bus",
-                spatial.oil.shipping,
-                location=spatial.oil.demand_locations,
-                carrier="shipping oil",
-                unit="MWh_LHV",
-            )
-
-            n.add(
-                "Load",
-                spatial.oil.shipping,
-                bus=spatial.oil.shipping,
-                carrier="shipping oil",
-                p_set=p_set_oil,
-            )
-
-            n.add(
-                "Link",
-                spatial.oil.shipping,
-                bus0=spatial.oil.nodes,
-                bus1=spatial.oil.shipping,
-                bus2="co2 atmosphere",
-                carrier="shipping oil",
-                p_nom_extendable=True,
-                efficiency2=costs.at["oil", "CO2 intensity"],
-            )
 
 
 def add_waste_heat(

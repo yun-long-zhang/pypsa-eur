@@ -83,7 +83,7 @@ co2_budget:
   2035: 0.250
   2040: 0.100 # 90% by 2040
   2045: 0.050
-  2050: 0.000
+  2050: -0.1000
 
   # CO2 budget as a fraction of 1990 emissions  46Gt
 # this is over-ridden if CO2Lx is set in sector_opts
@@ -687,7 +687,7 @@ sector:
     2035: 100
     2040: 200
     2045: 200
-    2050: 600
+    2050: 0
   co2_sequestration_cost: 10  #EUR/tCO2 for transport and sequestration of CO2
   co2_sequestration_lifetime: 50  #The lifetime of a CO2 sequestration site
   cc_fraction: 0.9 #The default fraction of CO2 captured with post-combustion capture
@@ -708,14 +708,14 @@ sector:
       allam: true  #Add Allam cycle gas power plants using methanol
     biomass_to_methanol: true
     biomass_to_methanol_cc: true
-    e_biomethanol: true
+    e_biomethanol: false
   H2_network: true
   H2_retrofit: false  # if set to True existing gas pipes can be retrofitted to H2 pipes
   # according to hydrogen backbone strategy (April, 2020) p.15
   # https://gasforclimate2050.eu/wp-content/uploads/2020/07/2020_European-Hydrogen-Backbone_Report.pdf
   # 60% of original natural gas capacity could be used in cost-optimal case as H2 capacity
-  electrobiofuels: true
-  e_bioSNG: true
+  electrobiofuels: false
+  e_bioSNG: false
   co2_spatial: true  #Add option to spatially resolve carrier representing stored carbon dioxide. 
   #This allows for more detailed modelling of CCUTS, e.g. regarding the capturing of industrial process emissions, 
   #usage as feedstock for electrofuels, transport of carbon dioxide, and geological sequestration sites.
