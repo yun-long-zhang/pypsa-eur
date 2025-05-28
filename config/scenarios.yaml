@@ -12,12 +12,12 @@
 #       renewable_carriers: [wind, solar] # override the list of renewable carriers
 
 
-# 1-nl-nm-ns-ynetwork-mid-0-0-SHen-AVen-2: 
+# 1-nl-nm-ns-ynetwork-mid-0-140-SHen-AVen: 
 #   co2_budget:
 #     2050: 0.000
 #   sector:
 #     co2_sequestration_potential:
-#       2050: 0
+#       2050: 140
 
 # 1-nl-nm-ns-ynetwork-mid-0-280-SHen-AVen: 
 #   co2_budget:
@@ -47,26 +47,56 @@
 #     co2_sequestration_potential:
 #       2050: 700
 
-# 1-nl-nm-ns-ynetwork-mid-0-840-SHen-AVen-2: 
+# 1-nl-nm-ns-ynetwork-mid-0-840-SHen-AVen: 
 #   co2_budget:
 #     2050: 0.000
 #   sector:
 #     co2_sequestration_potential:
 #       2050: 840
 
-# 1-nl-nm-ns-ynetwork-mid-0-0-SHen-AVen-2: 
+
+# 1-nl-nm-ns-ynetwork-mid-0-140-SHex-AVex: 
 #   co2_budget:
 #     2050: 0.000
 #   sector:
 #     co2_sequestration_potential:
-#       2050: 0
+#       2050: 140
 
-1-nl-nm-ns-ynetwork-mid-0-140-SHex-AVex: 
-  co2_budget:
-    2050: 0.000
-  sector:
-    co2_sequestration_potential:
-      2050: 140
+# 1-nl-nm-ns-ynetwork-mid-0-280-SHex-AVex: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 280
+
+# 1-nl-nm-ns-ynetwork-mid-0-420-SHex-AVex: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 420
+
+# 1-nl-nm-ns-ynetwork-mid-0-560-SHex-AVex: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 560
+
+# 1-nl-nm-ns-ynetwork-mid-0-700-SHex-AVex: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 700
+
+# 1-nl-nm-ns-ynetwork-mid-0-840-SHex-AVex: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 840
+
 
 # 1-nl-nm-ns-ynetwork-mid-0-420-SHen-AVen: 
 #   co2_budget:
@@ -133,38 +163,309 @@
 #     co2_sequestration_potential:
 #       2050: 840
 
-
-
-# yl-ym-ys-ynetwork-mid-10-700-1.3-shipping-no: 
+# 1-yl-ym-ys-ynetwork-mid-0-980-SHex-AVex: 
 #   co2_budget:
-#     2050: -0.100
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 980
+# 1-yl-ym-ys-ynetwork-mid-0-1120-SHex-AVex: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 1120
+# 1-yl-ym-ys-ynetwork-mid-0-1260-SHex-AVex: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 1260
+
+# 1-nl-nm-ns-ynetwork-mid-0-140-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 140
+# 1-nl-nm-ns-ynetwork-mid-0-280-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 280
+# 1-nl-nm-ns-ynetwork-mid-0-420-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 420
+# 1-nl-nm-ns-ynetwork-mid-0-560-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 560
+# 1-nl-nm-ns-ynetwork-mid-0-700-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
 #   sector:
 #     co2_sequestration_potential:
 #       2050: 700
-# yl-ym-ys-ynetwork-mid-10-800-1.3-shipping-no: 
+# 1-nl-nm-ns-ynetwork-mid-0-840-SHen-AVen: 
 #   co2_budget:
-#     2050: -0.100
+#     2050: 0.000
 #   sector:
 #     co2_sequestration_potential:
-#       2050: 800
-# yl-ym-ys-ynetwork-mid-10-900-1.3-shipping-no: 
+#       2050: 840
+
+# 1-nl-nm-ns-ynetwork-mid-0-980-SHen-AVen: 
 #   co2_budget:
-#     2050: -0.100
+#     2050: 0.000
 #   sector:
 #     co2_sequestration_potential:
-#       2050: 900
-# yl-ym-ys-ynetwork-mid-10-1000-1.3-shipping-no: 
+#       2050: 980
+# 1-nl-nm-ns-ynetwork-mid-0-1120-SHen-AVen: 
 #   co2_budget:
-#     2050: -0.100
+#     2050: 0.000
 #   sector:
 #     co2_sequestration_potential:
-#       2050: 1000
-# yl-ym-ys-ynetwork-mid-10-1100-1.3-shipping-no: 
+#       2050: 1120
+# 1-nl-nm-ns-ynetwork-mid-0-1260-SHen-AVen: 
 #   co2_budget:
-#     2050: -0.100
+#     2050: 0.000
 #   sector:
 #     co2_sequestration_potential:
-#       2050: 1100
+#       2050: 1260
+
+1-nl-nm-ns-ynetwork-mid-0-140-SHen-AVen-noimport: 
+  co2_budget:
+    2050: 0.000
+  sector:
+    co2_sequestration_potential:
+      2050: 140
+1-nl-nm-ns-ynetwork-mid-0-280-SHen-AVen-noimport: 
+  co2_budget:
+    2050: 0.000
+  sector:
+    co2_sequestration_potential:
+      2050: 280
+1-nl-nm-ns-ynetwork-mid-0-420-SHen-AVen-noimport: 
+  co2_budget:
+    2050: 0.000
+  sector:
+    co2_sequestration_potential:
+      2050: 420
+1-nl-nm-ns-ynetwork-mid-0-560-SHen-AVen-noimport: 
+  co2_budget:
+    2050: 0.000
+  sector:
+    co2_sequestration_potential:
+      2050: 560
+1-nl-nm-ns-ynetwork-mid-0-700-SHen-AVen-noimport: 
+  co2_budget:
+    2050: 0.000
+  sector:
+    co2_sequestration_potential:
+      2050: 700
+1-nl-nm-ns-ynetwork-mid-0-840-SHen-AVen-noimport: 
+  co2_budget:
+    2050: 0.000
+  sector:
+    co2_sequestration_potential:
+      2050: 840
+
+1-nl-nm-ns-ynetwork-mid-0-980-SHen-AVen-noimport: 
+  co2_budget:
+    2050: 0.000
+  sector:
+    co2_sequestration_potential:
+      2050: 980
+1-nl-nm-ns-ynetwork-mid-0-1120-SHen-AVen-noimport: 
+  co2_budget:
+    2050: 0.000
+  sector:
+    co2_sequestration_potential:
+      2050: 1120
+1-nl-nm-ns-ynetwork-mid-0-1260-SHen-AVen-noimport: 
+  co2_budget:
+    2050: 0.000
+  sector:
+    co2_sequestration_potential:
+      2050: 1260
+
+
+# 1-yl-ym-ys-ynetwork-mid-0-140-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 140
+# 1-yl-ym-ys-ynetwork-mid-0-280-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 280
+# 1-yl-ym-ys-ynetwork-mid-0-420-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 420
+# 1-yl-ym-ys-ynetwork-mid-0-560-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 560
+# 1-yl-ym-ys-ynetwork-mid-0-700-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 700
+# 1-yl-ym-ys-ynetwork-mid-0-840-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 840
+
+# 1-yl-ym-ys-ynetwork-mid-0-980-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 980
+# 1-yl-ym-ys-ynetwork-mid-0-1120-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 1120
+# 1-yl-ym-ys-ynetwork-mid-0-1260-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 1260
+
+#low biomass scenario
+
+# 1-yl-ym-ys-ynetwork-low-0-140-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 140
+# 1-yl-ym-ys-ynetwork-low-0-280-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 280
+# 1-yl-ym-ys-ynetwork-low-0-420-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 420
+# 1-yl-ym-ys-ynetwork-low-0-560-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 560
+# 1-yl-ym-ys-ynetwork-low-0-700-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 700
+# 1-yl-ym-ys-ynetwork-low-0-840-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 840
+
+# 1-yl-ym-ys-ynetwork-low-0-980-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 980
+# 1-yl-ym-ys-ynetwork-low-0-1120-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 1120
+# 1-yl-ym-ys-ynetwork-low-0-1260-SHen-AVen: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 1260
+
+
+# 1-yl-ym-ys-ynetwork-low-0-140-SHen-AVen-noimport: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 140
+# 1-yl-ym-ys-ynetwork-low-0-280-SHen-AVen-noimport: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 280
+# 1-yl-ym-ys-ynetwork-low-0-420-SHen-AVen-noimport: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 420
+# 1-yl-ym-ys-ynetwork-low-0-560-SHen-AVen-noimport: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 560
+# 1-yl-ym-ys-ynetwork-low-0-700-SHen-AVen-noimport: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 700
+# 1-yl-ym-ys-ynetwork-low-0-840-SHen-AVen-noimport: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 840
+
+# 1-yl-ym-ys-ynetwork-low-0-980-SHen-AVen-noimport: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 980
+# 1-yl-ym-ys-ynetwork-low-0-1120-SHen-AVen-noimport: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 1120
+# 1-yl-ym-ys-ynetwork-low-0-1260-SHen-AVen-noimport: 
+#   co2_budget:
+#     2050: 0.000
+#   sector:
+#     co2_sequestration_potential:
+#       2050: 1260
+
 
 
 

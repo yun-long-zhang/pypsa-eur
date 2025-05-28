@@ -1032,8 +1032,8 @@ def add_biomass_to_methanol_cc(n, costs):
 def add_e_biomethanol(n, costs):
     marginal_cost = (
         costs.loc["biomass-to-methanol", "VOM"]
-        * costs.at["biomass-to-methanol", "efficiency"]
-    )
+        * costs.at["biomass-to-methanol", "efficiency"]  * 1.2
+    )  #https://doi.org/10.1016/j.energy.2023.127202
     if options.get("solid_biomass_transport_cost", False):
         marginal_cost += options["solid_biomass_transport_cost"]
     n.add(
@@ -1052,7 +1052,7 @@ def add_e_biomethanol(n, costs):
         efficiency3=-costs.at["solid biomass", "CO2 intensity"] + costs.at["biomass-to-methanol", "CO2 stored"] * (1 - costs.at["biomass-to-methanol", "capture rate"]),
         p_nom_extendable=True,
         capital_cost=costs.at["biomass-to-methanol", "capital_cost"]
-        * costs.at["biomass-to-methanol", "efficiency"] * 1.3,
+        * costs.at["biomass-to-methanol", "efficiency"] * 0.8,   #https://doi.org/10.1016/j.energy.2023.127202
         marginal_cost=marginal_cost,
     )
 
@@ -2246,6 +2246,8 @@ def add_storage_and_grids(
             capital_cost=costs.at["SMR", "capital_cost"],
             lifetime=costs.at["SMR", "lifetime"],
         )
+
+    
 
 
 def check_land_transport_shares(shares):
@@ -4267,7 +4269,7 @@ def add_biomass(
             options=options,
             cf_industry=cf_industry,
         )
-        marginal_cost = costs.at["BtL", "VOM"] * costs.at["BtL", "efficiency"]
+        marginal_cost = costs.at["BtL", "VOM"] * costs.at["BtL", "efficiency"] * 1.5  #https://doi.org/10.1016/j.fuel.2018.08.004
         if options["solid_biomass_transport_cost"]:
             marginal_cost += options["solid_biomass_transport_cost"]
         efuel_scale_factor = costs.at["BtL", "C stored"] * 0.9
@@ -4292,7 +4294,7 @@ def add_biomass(
             #efficiency3=-costs.at["solid biomass", "CO2 intensity"] + costs.at["solid biomass", "CO2 intensity"]*(1-costs.at["electrobiofuels", "C in fuel"]),
             #efficiency3=-costs.at["solid biomass", "CO2 intensity"]* costs.at["electrobiofuels", "C in fuel"],
             p_nom_extendable=True,
-            capital_cost=costs.at["BtL", "capital_cost"] * costs.at["BtL", "efficiency"] * 1.3,
+            capital_cost=costs.at["BtL", "capital_cost"] * costs.at["BtL", "efficiency"] * 1.3,  #https://doi.org/10.1016/j.fuel.2018.08.004
             marginal_cost=marginal_cost,
             
         )
@@ -4361,7 +4363,7 @@ def add_biomass(
         )
         #add_carrier_buses(n, "gas")
         #efuel_scale_factor = costs.at["BtL", "C stored"]
-        marginal_cost = costs.at["BioSNG", "VOM"] * costs.at["BioSNG", "efficiency"]
+        marginal_cost = costs.at["BioSNG", "VOM"] * costs.at["BioSNG", "efficiency"]  * 1.1 #https://doi.org/10.1016/j.energy.2016.03.119
         if options.get("solid_biomass_transport_cost", False):
             marginal_cost += options["solid_biomass_transport_cost"]
         name = (
@@ -4385,7 +4387,7 @@ def add_biomass(
             #efficiency3=-costs.at["solid biomass", "CO2 intensity"] + costs.at["solid biomass", "CO2 intensity"]*(1-costs.at["e-bioSNG", "C in fuel"]),
             #efficiency3=-costs.at["solid biomass", "CO2 intensity"]* costs.at["electrobiofuels", "C in fuel"],
             p_nom_extendable=True,
-            capital_cost=costs.at["BioSNG", "capital_cost"] * costs.at["BioSNG", "efficiency"] * 1.1,
+            capital_cost=costs.at["BioSNG", "capital_cost"] * costs.at["BioSNG", "efficiency"]  * 1.04,  #https://doi.org/10.1016/j.energy.2016.03.119
             marginal_cost=marginal_cost,
         )
 
@@ -5676,7 +5678,7 @@ def add_aviation(
             spatial.oil.kerosene,
             bus = spatial.oil.kerosene,
             carrier = "kerosene for aviation",
-            p_set = p_set,
+            p_set = p_set.rename(lambda x: x + " kerosene for aviation"),
         )
 
         n.add(
