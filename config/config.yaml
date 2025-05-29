@@ -715,14 +715,14 @@ sector:
       allam: true  #Add Allam cycle gas power plants using methanol
     biomass_to_methanol: true
     biomass_to_methanol_cc: true
-    e_biomethanol: false
+    e_biomethanol: true
   H2_network: true
   H2_retrofit: false  # if set to True existing gas pipes can be retrofitted to H2 pipes
   # according to hydrogen backbone strategy (April, 2020) p.15
   # https://gasforclimate2050.eu/wp-content/uploads/2020/07/2020_European-Hydrogen-Backbone_Report.pdf
   # 60% of original natural gas capacity could be used in cost-optimal case as H2 capacity
-  electrobiofuels: false
-  e_bioSNG: false
+  electrobiofuels: true
+  e_bioSNG: true
   co2_spatial: true  #Add option to spatially resolve carrier representing stored carbon dioxide. 
   #This allows for more detailed modelling of CCUTS, e.g. regarding the capturing of industrial process emissions, 
   #usage as feedstock for electrofuels, transport of carbon dioxide, and geological sequestration sites.
@@ -792,19 +792,20 @@ sector:
       heat_pumps: true
       electric_boiler: true
       methane: true
-      methanol: true
+      #methanol: true
     medium_T:
       biomass: true
       methane: true
-      electric_boiler: true
-      methanol: true
+      #electric_boiler: true
+      #methanol: true
       hydrogen: true
     high_T:
       hydrogen: true
       methane: true  
   biomass_to_liquid: true #Add option for transforming solid biomass into liquid fuel with the same properties as oil
   biomass_to_liquid_cc: true
-  
+  grey_methanol: true
+  blue_methanol: true
   biosng: true #Add option for transforming solid biomass into synthesis gas with the same properties as natural gas
   biosng_cc: true
   bioH2: true #Add option for transforming solid biomass into hydrogen with carbon capture
@@ -836,7 +837,7 @@ sector:
     max_amount: 1390 # TWh
     upstream_emissions_factor: .0 #.1 #share of solid biomass CO2 emissions at full combustion Upstream emissions of solid biomass imports
   imports:
-    enable: false
+    enable: true
     limit: .inf
     limit_sense: <=
     price:

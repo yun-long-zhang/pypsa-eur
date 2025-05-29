@@ -2247,7 +2247,62 @@ def add_storage_and_grids(
             lifetime=costs.at["SMR", "lifetime"],
         )
 
-    
+    if options["grey_methanol"]:
+        capital_cost = (
+            costs.at["SMR", "capital_cost"]
+            + costs.at["methanolisation", "capital_cost"]
+            * 0.45 #costs.at["grey methanol synthesis", "efficiency"]
+        )
+        co2_emissions = (
+            costs.at["gas", "CO2 intensity"]
+            - 0.45 #costs.at["grey methanol synthesis", "efficiency"]
+            * costs.at["methanol", "CO2 intensity"]
+        )
+        n.add(
+            "Link",
+            spatial.gas.locations,
+            suffix=" grey methanol",
+            bus0=spatial.gas.nodes,
+            bus1=spatial.methanol.nodes,
+            bus2="co2 atmosphere",
+            p_nom_extendable=True,
+            carrier="grey methanol",
+            efficiency= 0.45, #costs.at["grey methanol synthesis", "efficiency"]
+            efficiency2=co2_emissions,
+            capital_cost=capital_cost,
+            lifetime=costs.at["SMR", "lifetime"],
+        )
+
+    if options["blue_methanol"]:
+        co2_emissions = (
+            costs.at["gas", "CO2 intensity"]
+            - 0.45
+            * costs.at["methanol", "CO2 intensity"]
+        )
+        capital_cost = (
+            costs.at["SMR", "capital_cost"]*0.05
+            + costs.at["methanolisation", "capital_cost"]
+            * 0.05
+            + costs.at["cement capture", "capital_cost"]
+            * co2_emissions
+            * options["cc_fraction"]
+        )
+        n.add(
+            "Link",
+            spatial.gas.locations,
+            suffix=" blue methanol",
+            bus0=spatial.gas.nodes,
+            bus1=spatial.methanol.nodes,
+            bus2="co2 atmosphere",
+            bus3=spatial.co2.nodes,
+            p_nom_extendable=True,
+            carrier="blue methanol",
+            efficiency=1,
+            efficiency2=co2_emissions * (1 - options["cc_fraction"]),
+            efficiency3=co2_emissions * options["cc_fraction"],
+            capital_cost=capital_cost,
+            lifetime=costs.at["SMR", "lifetime"],
+        )
 
 
 def check_land_transport_shares(shares):
@@ -3987,8 +4042,8 @@ def add_biomass(
             efficiency2=costs.at["biogas CC", "CO2 stored"]
             * costs.at["biogas CC", "capture rate"],
             efficiency3=-costs.at["gas", "CO2 intensity"]
-            + costs.at["biogas CC", "CO2 stored"]
-            * (1 - costs.at["biogas CC", "capture rate"]),
+            - costs.at["biogas CC", "CO2 stored"]
+            * costs.at["biogas CC", "capture rate"],
             p_nom_extendable=True,
             lifetime=costs.at["biogas CC", "lifetime"],
         )
@@ -4583,43 +4638,43 @@ def add_low_t_industry(n, nodes, industrial_demand, costs, must_run):
             marginal_cost=costs.at["electric boiler steam", "VOM"],
             lifetime=costs.at["electric boiler steam", "lifetime"],
         )
-    if options["industry_t"]["low_T"]["methanol"]:
-        n.add(
-            "Link",
-            nodes,
-            suffix=" methanol for lowT industry",
-            bus0=spatial.methanol.nodes,
-            bus1=nodes + " lowT industry",
-            bus2="co2 atmosphere",
-            carrier="lowT industry methanol",
-            p_nom_extendable=True,
-            efficiency=1.0,
-            efficiency2=costs.at["methanol", "CO2 intensity"],
-            capital_cost=costs.at["gas boiler steam", "capital_cost"],
+    # if options["industry_t"]["low_T"]["methanol"]:
+    #     n.add(
+    #         "Link",
+    #         nodes,
+    #         suffix=" methanol for lowT industry",
+    #         bus0=spatial.methanol.nodes,
+    #         bus1=nodes + " lowT industry",
+    #         bus2="co2 atmosphere",
+    #         carrier="lowT industry methanol",
+    #         p_nom_extendable=True,
+    #         efficiency=1.0,
+    #         efficiency2=costs.at["methanol", "CO2 intensity"],
+    #         capital_cost=costs.at["gas boiler steam", "capital_cost"],
             
-        )
+    #     )
 
-        n.add(
-            "Link",
-            nodes,
-            suffix=" methanol for lowT industry CC",
-            bus0=spatial.methanol.nodes,
-            bus1=nodes + " lowT industry",
-            bus2="co2 atmosphere",
-            bus3=spatial.co2.nodes,
-            carrier="lowT industry CC methanol",
-            p_nom_extendable=True,
-            capital_cost=costs.at["cement capture", "capital_cost"]
-            * costs.at["methanol", "CO2 intensity"]
-            + costs.at["gas boiler steam", "capital_cost"],
-            efficiency=0.9,
-            efficiency2=costs.at["methanol", "CO2 intensity"]
-            * (1 - costs.at["cement capture", "capture_rate"]),
-            efficiency3=costs.at["methanol", "CO2 intensity"]
-            * costs.at["cement capture", "capture_rate"],
-            lifetime=costs.at["cement capture", "lifetime"],
+    #     n.add(
+    #         "Link",
+    #         nodes,
+    #         suffix=" methanol for lowT industry CC",
+    #         bus0=spatial.methanol.nodes,
+    #         bus1=nodes + " lowT industry",
+    #         bus2="co2 atmosphere",
+    #         bus3=spatial.co2.nodes,
+    #         carrier="lowT industry CC methanol",
+    #         p_nom_extendable=True,
+    #         capital_cost=costs.at["cement capture", "capital_cost"]
+    #         * costs.at["methanol", "CO2 intensity"]
+    #         + costs.at["gas boiler steam", "capital_cost"],
+    #         efficiency=0.9,
+    #         efficiency2=costs.at["methanol", "CO2 intensity"]
+    #         * (1 - costs.at["cement capture", "capture_rate"]),
+    #         efficiency3=costs.at["methanol", "CO2 intensity"]
+    #         * costs.at["cement capture", "capture_rate"],
+    #         lifetime=costs.at["cement capture", "lifetime"],
             
-        )
+    #     )
 
 def add_medium_t_industry(n, nodes, industrial_demand, costs, must_run):
     """
@@ -4747,59 +4802,58 @@ def add_medium_t_industry(n, nodes, industrial_demand, costs, must_run):
             lifetime=costs.at["direct firing gas", "lifetime"],
         )
     
-    if options["industry_t"]["medium_T"]["electric_boiler"]:
-        n.add(
-            "Link",
-            nodes,
-            suffix=" electricity for mediumT industry",
-            bus0=nodes + " low voltage",
-            bus1=nodes + " mediumT industry",
-            carrier="electricity for mediumT industry",
-            p_nom_extendable=True,
-            p_min_pu=must_run,
-            efficiency=costs.at["electric boiler steam", "efficiency"],
-            capital_cost=costs.at["electric boiler steam", "capital_cost"]
-            * costs.at["electric boiler steam", "efficiency"],
-            marginal_cost=costs.at["electric boiler steam", "VOM"],
-            lifetime=costs.at["electric boiler steam", "lifetime"],
-        )
-    if options["industry_t"]["medium_T"]["methanol"]:
-        n.add(
-            "Link",
-            nodes,
-            suffix=" methanol for mediumT industry",
-            bus0=spatial.methanol.nodes,
-            bus1=nodes + " mediumT industry",
-            bus2="co2 atmosphere",
-            carrier="methanol for mediumT industry",
-            p_nom_extendable=True,
-            efficiency=1.0,
-            efficiency2=costs.at["methanol", "CO2 intensity"],
-            capital_cost=costs.at["gas boiler steam", "capital_cost"],
+    # if options["industry_t"]["medium_T"]["electric_boiler"]:
+    #     n.add(
+    #         "Link",
+    #         nodes,
+    #         suffix=" electricity for mediumT industry",
+    #         bus0=nodes + " low voltage",
+    #         bus1=nodes + " mediumT industry",
+    #         carrier="electricity for mediumT industry",
+    #         p_nom_extendable=True,
+    #         p_min_pu=must_run,
+    #         efficiency=costs.at["electric boiler steam", "efficiency"],
+    #         capital_cost=costs.at["electric boiler steam", "capital_cost"]
+    #         * costs.at["electric boiler steam", "efficiency"],
+    #         marginal_cost=costs.at["electric boiler steam", "VOM"],
+    #         lifetime=costs.at["electric boiler steam", "lifetime"],
+    #     )
+    # if options["industry_t"]["medium_T"]["methanol"]:
+    #     n.add(
+    #         "Link",
+    #         nodes,
+    #         suffix=" methanol for mediumT industry",
+    #         bus0=spatial.methanol.nodes,
+    #         bus1=nodes + " mediumT industry",
+    #         bus2="co2 atmosphere",
+    #         carrier="methanol for mediumT industry",
+    #         p_nom_extendable=True,
+    #         efficiency=1.0,
+    #         efficiency2=costs.at["methanol", "CO2 intensity"],
+    #         capital_cost=costs.at["gas boiler steam", "capital_cost"],
             
-        )
+    #     )
 
-        n.add(
-            "Link",
-            nodes,
-            suffix=" methanol for mediumT industry CC",
-            bus0=spatial.methanol.nodes,
-            bus1=nodes + " mediumT industry",
-            bus2="co2 atmosphere",
-            bus3=spatial.co2.nodes,
-            carrier="methanol for mediumT industry CC",
-            p_nom_extendable=True,
-            capital_cost=costs.at["cement capture", "capital_cost"]
-            * costs.at["methanol", "CO2 intensity"]
-            + costs.at["gas boiler steam", "capital_cost"],
-            efficiency=0.9,
-            efficiency2=costs.at["methanol", "CO2 intensity"]
-            * (1 - costs.at["cement capture", "capture_rate"]),
-            efficiency3=costs.at["methanol", "CO2 intensity"]
-            * costs.at["cement capture", "capture_rate"],
-            lifetime=costs.at["cement capture", "lifetime"],
-            
-        )
+    #     n.add(
+    #         "Link",
+    #         nodes,
+    #         suffix=" methanol for mediumT industry CC",
+    #         bus0=spatial.methanol.nodes,
+    #         bus1=nodes + " mediumT industry",
+    #         bus2="co2 atmosphere",
+    #         bus3=spatial.co2.nodes,
+    #         carrier="methanol for mediumT industry CC",
+    #         p_nom_extendable=True,
+    #         capital_cost=costs.at["cement capture", "capital_cost"]
+    #         * costs.at["methanol", "CO2 intensity"]
+    #         + costs.at["gas boiler steam", "capital_cost"],
+    #         efficiency=0.9,
+    #         efficiency2=costs.at["methanol", "CO2 intensity"]
+    #         * (1 - costs.at["cement capture", "capture_rate"]),
+    #         efficiency3=costs.at["methanol", "CO2 intensity"]
+    #         * costs.at["cement capture", "capture_rate"],
+    #         lifetime=costs.at["cement capture", "lifetime"],
+    #     )
 
     if options["industry_t"]["medium_T"]["hydrogen"]:
         # TODO: research cost of industrial H2 combustion, here set to 10x methane combustion

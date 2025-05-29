@@ -623,3 +623,5 @@ plotting:
     '': "#000000"   
     aviation methanol: "#a1ffe6"
     aviation oil: "#a1ffe6"
+    grey methanol: "#ba68c8"
+    blue methanol: "#f06292"
