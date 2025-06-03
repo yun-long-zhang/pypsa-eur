@@ -180,6 +180,7 @@ def define_spatial(nodes, options):
     if options["regional_oil_demand"]:
         spatial.oil.demand_locations = nodes
         spatial.oil.naphtha = nodes + " naphtha for industry"
+        spatial.oil.HVC = nodes + " HVC for industry"
         spatial.oil.kerosene = nodes + " kerosene for aviation"
         spatial.oil.aviation = nodes + " aviation oil"
         spatial.oil.shipping = nodes + " shipping oil"
@@ -188,6 +189,7 @@ def define_spatial(nodes, options):
     else:
         spatial.oil.demand_locations = ["EU"]
         spatial.oil.naphtha = ["EU naphtha for industry"]
+        spatial.oil.HVC = ["EU HVC for industry"]
         spatial.oil.kerosene = ["EU kerosene for aviation"]
         spatial.oil.aviation = ["EU aviation oil"]
         spatial.oil.shipping = ["EU shipping oil"]
@@ -2276,13 +2278,12 @@ def add_storage_and_grids(
     if options["blue_methanol"]:
         co2_emissions = (
             costs.at["gas", "CO2 intensity"]
-            - 0.45
-            * costs.at["methanol", "CO2 intensity"]
+            - 0.45 * costs.at["methanol", "CO2 intensity"]
         )
         capital_cost = (
             costs.at["SMR", "capital_cost"]*0.05
             + costs.at["methanolisation", "capital_cost"]
-            * 0.05
+            * 0.45
             + costs.at["cement capture", "capital_cost"]
             * co2_emissions
             * options["cc_fraction"]
@@ -2297,7 +2298,7 @@ def add_storage_and_grids(
             bus3=spatial.co2.nodes,
             p_nom_extendable=True,
             carrier="blue methanol",
-            efficiency=1,
+            efficiency=0.45,
             efficiency2=co2_emissions * (1 - options["cc_fraction"]),
             efficiency3=co2_emissions * options["cc_fraction"],
             capital_cost=capital_cost,
@@ -5358,16 +5359,16 @@ def add_industry(
     if demand_factor != 1:
         logger.warning(f"Changing HVC demand by {demand_factor * 100 - 100:+.2f}%.")
 
-    p_set_naphtha = (
+    p_set_HVC = (
         demand_factor
         * industrial_demand.loc[nodes, "naphtha"].rename(
-            lambda x: x + " naphtha for industry"
+            lambda x: x + " HVC for industry"
         )
         / nhours
     )
 
     if not options["regional_oil_demand"]:
-        p_set_naphtha = p_set_naphtha.sum()
+        p_set_HVC = p_set_HVC.sum()
 
     n.add(
         "Bus",
@@ -5376,13 +5377,35 @@ def add_industry(
         carrier="naphtha for industry",
         unit="MWh_LHV",
     )
+    if options["oil_cracking"]:
+        cracking_losses = 0.6 #options["oil_cracking"] 0.37 in https://doi.org/10.1021/acs.energyfuels.8b00691
+        #0.23-0.342 in  https://doi.org/10.1016/j.jaap.2019.104705
+        
+        n.add(
+            "Link",
+            spatial.oil.naphtha,
+            bus0=spatial.oil.nodes,
+            bus1=spatial.oil.naphtha,
+            bus2="co2 atmosphere",
+            carrier="oil cracking",
+            efficiency=1 - cracking_losses,
+            efficiency2=costs.at["oil", "CO2 intensity"] * cracking_losses,
+        )
+
+    n.add(
+        "Bus",
+        spatial.oil.HVC,
+        location=spatial.oil.demand_locations,
+        carrier="HVC for industry",
+        unit="MWh_LHV",
+    )
 
     n.add(
         "Load",
-        spatial.oil.naphtha,
-        bus=spatial.oil.naphtha,
-        carrier="naphtha for industry",
-        p_set=p_set_naphtha,
+        spatial.oil.HVC,
+        bus=spatial.oil.HVC,
+        carrier="HVC for industry",
+        p_set=p_set_HVC,
     )
 
     # some CO2 from naphtha are process emissions from steam cracker
@@ -5397,6 +5420,11 @@ def add_industry(
         cf_industry["HVC_environment_sequestration_fraction"],
         investment_year,
     )
+    # add link name for naptha to HVC depending on number of oil nodes/ co2 nodes
+    if len(spatial.oil.nodes) > 1 or len(spatial.co2.nodes) > 1:
+        link_names = nodes + " HVC for industry"
+    else:
+        link_names = spatial.oil.HVC
 
     if cf_industry["waste_to_energy"] or cf_industry["waste_to_energy_cc"]:
         non_sequestered_hvc_locations = (
@@ -5413,12 +5441,12 @@ def add_industry(
 
         n.add(
             "Link",
-            spatial.oil.naphtha,
-            bus0=spatial.oil.nodes,
-            bus1=spatial.oil.naphtha,
+            link_names,
+            bus0=spatial.oil.naphtha,
+            bus1=spatial.oil.HVC,
             bus2=non_sequestered_hvc_locations,
             bus3=spatial.co2.process_emissions,
-            carrier="naphtha for industry",
+            carrier="naphtha-to-HVC",
             p_nom_extendable=True,
             efficiency2=non_sequestered
             * emitted_co2_per_naphtha
@@ -5511,16 +5539,75 @@ def add_industry(
     else:
         n.add(
             "Link",
-            spatial.oil.naphtha,
-            bus0=spatial.oil.nodes,
-            bus1=spatial.oil.naphtha,
+            link_names,
+            bus0=spatial.oil.naphtha,
+            bus1=spatial.oil.HVC,
             bus2="co2 atmosphere",
             bus3=spatial.co2.process_emissions,
-            carrier="naphtha for industry",
+            carrier="naphtha-to-HVC",
             p_nom_extendable=True,
             efficiency2=emitted_co2_per_naphtha * non_sequestered,
             efficiency3=process_co2_per_naphtha,
         )
+    if options["methanol"].get("methanol_to_olefins", False):
+        logger.info("Adding methanol to olefins")
+        tech = "methanol-to-olefins/aromatics"
+
+        naphtha_per_t_hvc = 12.622  # MWh per tonne of HVC (taken from sector ratios)
+
+        process_emissions = (
+            costs.at[tech, "carbondioxide-output"] / costs.at[tech, "methanol-input"]
+        )
+
+        if not (cf_industry["waste_to_energy"] or cf_industry["waste_to_energy_cc"]):
+            n.add(
+                "Link",
+                nodes,
+                suffix=f" {tech}",
+                carrier=tech,
+                p_nom_extendable=True,
+                bus0=spatial.methanol.nodes,
+                bus1=spatial.oil.HVC,
+                bus2=nodes,
+                bus3=spatial.co2.process_emissions,
+                bus4="co2 atmosphere",
+                efficiency=1
+                / costs.at[tech, "methanol-input"]
+                * naphtha_per_t_hvc,  # because MtO produces t HVC not MWh HVC
+                efficiency2=-costs.at[tech, "electricity-input"]
+                / costs.at[tech, "methanol-input"],
+                efficiency3=process_emissions,
+                efficiency4=(
+                    costs.at["methanolisation", "carbondioxide-input"]
+                    - process_emissions
+                )
+                * non_sequestered,
+            )
+        else:
+            n.add(
+                "Link",
+                nodes,
+                suffix=f" {tech}",
+                carrier=tech,
+                p_nom_extendable=True,
+                bus0=spatial.methanol.nodes,
+                bus1=spatial.oil.HVC,
+                bus2=nodes,
+                bus3=spatial.co2.process_emissions,
+                bus4=non_sequestered_hvc_locations,
+                efficiency=1
+                / costs.at[tech, "methanol-input"]
+                * naphtha_per_t_hvc,  # because MtO produces t HVC not MWh no MWh HVC
+                efficiency2=-costs.at[tech, "electricity-input"]
+                / costs.at[tech, "methanol-input"],
+                efficiency3=process_emissions,
+                efficiency4=(
+                    costs.at["methanolisation", "carbondioxide-input"]
+                    - process_emissions
+                )
+                * non_sequestered
+                / costs.at["oil", "CO2 intensity"],  # MWh_oil/Mwh_meoh
+            )
 
     # TODO simplify bus expression
     n.add(

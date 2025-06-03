@@ -625,3 +625,6 @@ plotting:
     aviation oil: "#a1ffe6"
     grey methanol: "#ba68c8"
     blue methanol: "#f06292"
+    HVC for industry: '#ff8db2'        # Soft rose pink
+    naphtha-to-HVC: '#d46ba3'          # Deep mauve pink
+    oil cracking: '#9e5b70'            # Muted maroon-purple

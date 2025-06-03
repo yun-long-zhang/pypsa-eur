@@ -69,10 +69,10 @@ snapshots:
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#enable
 enable:
   retrieve: auto
-  retrieve_databundle: true
+  retrieve_databundle: false
   retrieve_cost_data: false
   build_cutout: false
-  retrieve_cutout: true
+  retrieve_cutout: false
   drop_leap_day: true
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#co2-budget
@@ -708,6 +708,7 @@ sector:
     methanol_reforming: true
     methanol_reforming_cc: true
     methanol_to_kerosene: true
+    methanol_to_olefins: true
     methanol_to_power:
       ccgt: true   #Add combined cycle gas turbine (CCGT) using methanol
       ccgt_cc: true
@@ -723,6 +724,7 @@ sector:
   # 60% of original natural gas capacity could be used in cost-optimal case as H2 capacity
   electrobiofuels: true
   e_bioSNG: true
+  oil_cracking: true
   co2_spatial: true  #Add option to spatially resolve carrier representing stored carbon dioxide. 
   #This allows for more detailed modelling of CCUTS, e.g. regarding the capturing of industrial process emissions, 
   #usage as feedstock for electrofuels, transport of carbon dioxide, and geological sequestration sites.
@@ -837,7 +839,7 @@ sector:
     max_amount: 1390 # TWh
     upstream_emissions_factor: .0 #.1 #share of solid biomass CO2 emissions at full combustion Upstream emissions of solid biomass imports
   imports:
-    enable: true
+    enable: false
     limit: .inf
     limit_sense: <=
     price:
