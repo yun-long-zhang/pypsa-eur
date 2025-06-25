@@ -628,3 +628,52 @@ plotting:
     HVC for industry: '#ff8db2'        # Soft rose pink
     naphtha-to-HVC: '#d46ba3'          # Deep mauve pink
     oil cracking: '#9e5b70'            # Muted maroon-purple
+    methanol from biomass: '#a0d995'                    # Soft leaf green
+    methanol from biomass CC: '#7fb77e'                 # Olive forest green
+    biomass-to-shipping-methanol: '#6fa26f'             # Earthy green
+    biomass-cc-to-shipping-methanol: '#558a68'          # Deep muted green
+    methanol from e-biomethanol: '#f6d55c'              # Bright yellow-orange
+    ebiomethanol-to-shipping-methanol: '#e4b94e'        # Warm mustard
+    methanol from grey: '#bfbfbf'                       # Light industrial grey
+    grey-methanol-to-shipping-methanol: '#999999'       # Medium grey (distinct from other oils)
+    methanol from blue: '#5da9e9'                       # Clear blue
+    blue-methanol-to-shipping-methanol: '#3f7dcf'       # Navy-tinged blue
+    e-biomethanol-shipping: '#f4c542'                   # Golden yellow (consistent with e-fuels)
+    biomass-to-methanol-shipping: '#7fb77e'             # Leafy green (biomass-based)
+    biomass-to-methanol CC-shipping: '#558a68'          # Darker green (biomass + CCS)
+    blue methanol-shipping: '#3f7dcf'                   # Strong blue (natural gas + CCS)
+    grey methanol-shipping: '#a0a0a0'                     # Industrial grey (fossil-based)
+    oil from refining: '#5e5a5a'                     # Dark industrial grey (traditional refining)
+    methanol from green: '#7ecf87'                  # Light green (green methanol)
+    oil from green: '#9ac97f'                       # Olive green (green oil)
+    shipping-blue-methanol: '#3d73b9'               # Blue (shipping from blue methanol)
+    blue methanol-aviation: '#2f5ea3'               # Deep blue (aviation from blue methanol)
+    e-biomethanol-aviation: '#f4c542'               # Golden yellow (aviation e-biomethanol)
+    shipping-grey-methanol: '#999999'               # Grey (fossil methanol shipping)
+    shipping green oil: '#6bbf59'                   # Bright green (green oil shipping)
+    biomass-to-methanol-aviation: '#6ba174'         # Muted green (biomass to methanol aviation)
+    biomass-to-methanol CC-aviation: '#3e6e54'      # Dark green (biomass CC to methanol aviation)
+    grey methanol-aviation: '#888888'               # Mid grey (fossil methanol to aviation)
+    green-oil-to-kerosene: '#83b77c'                # Olive green (renewable kerosene from green oil)
+    shipping-green-methanol: '#56c187'              # Bright turquoise-green (shipping from green methanol)
+    green-methanol-to-kerosene: '#4aa36c'  
+    biomass to liquid 2: '#7ea97a'                  # Forest green (biomass-to-liquid, 2nd variant)
+    oil refining 2: '#4f4b4b'                       # Industrial grey (alternate refining process)
+    biomass-to-methanol CC-2: '#3c6650'             # Dark green (biomass methanol with CCS, v2)
+    e-biomethanol-2: '#f5c542'                      # Golden yellow (e-biomethanol variant)
+    biomass-to-methanol-2: '#6da874'               # Medium green (variant of biomass methanol)
+    biomass to liquid CC 2: '#345e44'              # Deep green-blue (with carbon capture)
+    grey methanol-2: '#888888'                     # Standard grey (grey methanol variant)
+    blue methanol-2: '#376b9e'                     # Deep blue (blue methanol v2)
+    electrobiofuels 2: '#d8b316' 
+    methanolisation 2: '#a16ea7'
+    oil primary 2: '#a0522d'                # Sienna – for oil-related primary resource
+    grey-methanol-to-kerosene: '#808080'   # Grey – indicating fossil-based methanol
+    blue-methanol-to-kerosene: '#4682b4'
+    green methanol: '#00cc66'             # Bright green – for renewable/green methanol
+    green oil: '#009966'                  # Darker green – renewable oil (e.g., bio-oil)
+    fossil oil: '#4d2600'                 # Dark brown – indicating fossil-based oil
+    refining-oil-to-kerosene: '#996633'   # Tan/brown – conventional oil refining
+    shipping refining oil: '#cc9966'
+    blue methanol 2: "#2E86AB"        # A deep blue
+    grey methanol 2: "#7F8C8D"        # A neutral grey

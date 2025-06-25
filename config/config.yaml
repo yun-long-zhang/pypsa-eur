@@ -69,10 +69,10 @@ snapshots:
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#enable
 enable:
   retrieve: auto
-  retrieve_databundle: false
+  retrieve_databundle: true
   retrieve_cost_data: false
   build_cutout: false
-  retrieve_cutout: false
+  retrieve_cutout: true
   drop_leap_day: true
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#co2-budget
@@ -585,7 +585,7 @@ sector:
   MWh_MeOH_per_tCO2: 4.0321
   MWh_MeOH_per_MWh_e: 3.6907
   shipping_hydrogen_liquefaction: true  # whether to consider liquefaction costs for shipping H2 demands
-  endogenous_shipping: true
+  endogenous_shipping: false
   shipping_hydrogen_share: #if there is a share, li
     2020: 0
     2025: 0
@@ -593,7 +593,7 @@ sector:
     2035: 0
     2040: 0
     2045: 0
-    2050: 0.1
+    2050: 0
   shipping_methanol_share:
     2020: 0
     2025: 0.15
@@ -601,7 +601,7 @@ sector:
     2035: 0.5
     2040: 0.7
     2045: 0.85
-    2050: 0.7
+    2050: 0.5
   shipping_oil_share:
     2020: 1
     2025: 0.85
@@ -609,7 +609,7 @@ sector:
     2035: 0.5
     2040: 0.3
     2045: 0.15
-    2050: 0.2
+    2050: 0.5
   shipping_methanol_efficiency: 0.46
   shipping_oil_efficiency: 0.40
   aviation_demand_factor: 1.7 #The proportion of demand for aviation compared to today’s consumption
