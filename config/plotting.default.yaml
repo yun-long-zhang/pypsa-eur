@@ -659,12 +659,12 @@ plotting:
     green-methanol-to-kerosene: '#4aa36c'  
     biomass to liquid 2: '#7ea97a'                  # Forest green (biomass-to-liquid, 2nd variant)
     oil refining 2: '#4f4b4b'                       # Industrial grey (alternate refining process)
-    biomass-to-methanol CC-2: '#3c6650'             # Dark green (biomass methanol with CCS, v2)
-    e-biomethanol-2: '#f5c542'                      # Golden yellow (e-biomethanol variant)
-    biomass-to-methanol-2: '#6da874'               # Medium green (variant of biomass methanol)
+    biomass-to-methanol CC 2: '#3c6650'             # Dark green (biomass methanol with CCS, v2)
+    e-biomethanol 2: '#f5c542'                      # Golden yellow (e-biomethanol variant)
+    biomass-to-methanol 2: '#6da874'               # Medium green (variant of biomass methanol)
     biomass to liquid CC 2: '#345e44'              # Deep green-blue (with carbon capture)
-    grey methanol-2: '#888888'                     # Standard grey (grey methanol variant)
-    blue methanol-2: '#376b9e'                     # Deep blue (blue methanol v2)
+    grey methanol 2: '#888888'                     # Standard grey (grey methanol variant)
+    blue methanol 2: '#376b9e'                     # Deep blue (blue methanol v2)
     electrobiofuels 2: '#d8b316' 
     methanolisation 2: '#a16ea7'
     oil primary 2: '#a0522d'                # Sienna – for oil-related primary resource

@@ -31,7 +31,7 @@ run:
       #- "resources/costs_2050.csv"
       
   shared_cutouts: true
-  #use_shadow_directory: true # Set to false if problems regarding missing directories occur
+  use_shadow_directory: false # Set to false if problems regarding missing directories occur
 
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#foresight
@@ -614,6 +614,7 @@ sector:
   shipping_oil_efficiency: 0.40
   aviation_demand_factor: 1.7 #The proportion of demand for aviation compared to today’s consumption
   endogenous_aviation: true  # 或 False
+  EU_liquid_fuel_policy: true # whether to consider the EU liquid fuel policy for aviation
   aviation_oil_share: 
     2050: 0.3
   aviation_methanol_share: 
@@ -943,11 +944,12 @@ industry:
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#costs
 costs:
-  file: "resources/costs_2050.csv"  # 2 Update this to your specific cost file path
-  year: 2050
+  file: "resources/costs_2040.csv"  # 2 Update this to your specific cost file path
+  year: 2040
   version: v0.11.0 #vX.X.X or <user>/<repo>/vX.X.X; e.g. ‘v0.5.0’
   #Version of technology-data repository to use. If this string is of the form <user>/<repo>/<version> 
   #then costs are instead retrieved from github.com/<user>/<repo> at the <version> tag.
+  #yun-long-zhang/technology-data-electrobiofuel/v0.01  doesnot work
   social_discountrate: 0.02 #Social discount rate to compare costs in different investment periods. 0.02 corresponds to a social discount rate of 2%.
   fill_values: #Default values if not specified for a technology in resources/costs.csv
     FOM: 0
