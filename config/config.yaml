@@ -614,7 +614,7 @@ sector:
   shipping_oil_efficiency: 0.40
   aviation_demand_factor: 1.7 #The proportion of demand for aviation compared to today’s consumption
   endogenous_aviation: true  # 或 False
-  EU_liquid_fuel_policy: true # whether to consider the EU liquid fuel policy for aviation
+  
   aviation_oil_share: 
     2050: 0.3
   aviation_methanol_share: 
@@ -725,6 +725,7 @@ sector:
   # 60% of original natural gas capacity could be used in cost-optimal case as H2 capacity
   electrobiofuels: true
   e_bioSNG: true
+  EU_liquid_fuel_policy: false # whether to consider the EU liquid fuel policy for aviation
   oil_cracking: true
   co2_spatial: true  #Add option to spatially resolve carrier representing stored carbon dioxide. 
   #This allows for more detailed modelling of CCUTS, e.g. regarding the capturing of industrial process emissions, 

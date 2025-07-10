@@ -24,9 +24,11 @@ gurobi.log
 /data
 /cutouts
 /tmp
+/fig
 doc/_build
 /data-analysis
-
+/scripts/backup
+/config/backup
 /scripts/old
 /scripts/create_scenarios.py
 /config/create_scenarios.py
@@ -68,6 +70,8 @@ d1gam3xoknrgr2.cloudfront.net/
 *.geojson
 
 *.ipynb
+
+*.png
 
 merger-todos.md
 
