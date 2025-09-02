@@ -945,7 +945,7 @@ industry:
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#costs
 costs:
-  file: "resources/costs_2040.csv"  # 2 Update this to your specific cost file path
+  file: "costs_2040.csv"  # 2 Update this to your specific cost file path
   year: 2040
   version: v0.11.0 #vX.X.X or <user>/<repo>/vX.X.X; e.g. ‘v0.5.0’
   #Version of technology-data repository to use. If this string is of the form <user>/<repo>/<version> 
