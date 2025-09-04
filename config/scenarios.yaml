@@ -17,9 +17,222 @@
   sector:
     co2_sequestration_potential:
       2050: 140 
-
-      
+    electrobiofuels: true
+    e_bioSNG: true
+    methanol:
+      e_biomethanol: true
+    EU_liquid_fuel_policy: false
 9-yes-mid-0-200-nopolicy: 
   sector:
     co2_sequestration_potential:
       2050: 200 
+    electrobiofuels: true
+    e_bioSNG: true
+    methanol:
+      e_biomethanol: true
+    EU_liquid_fuel_policy: false
+9-yes-mid-0-400-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 400 
+    electrobiofuels: true
+    e_bioSNG: true
+    methanol:
+      e_biomethanol: true
+    EU_liquid_fuel_policy: false
+9-yes-mid-0-600-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 600 
+    electrobiofuels: true
+    e_bioSNG: true
+    methanol:
+      e_biomethanol: true
+    EU_liquid_fuel_policy: false
+9-yes-mid-0-800-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 800 
+    electrobiofuels: true
+    e_bioSNG: true
+    methanol:
+      e_biomethanol: true
+    EU_liquid_fuel_policy: false
+9-yes-mid-0-1000-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 1000 
+    electrobiofuels: true
+    e_bioSNG: true
+    methanol:
+      e_biomethanol: true
+    EU_liquid_fuel_policy: false
+
+
+9-no-mid-0-140-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 140 
+    electrobiofuels: false
+    e_bioSNG: false
+    methanol:
+      e_biomethanol: false
+    EU_liquid_fuel_policy: false
+9-no-mid-0-200-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 200 
+    electrobiofuels: false
+    e_bioSNG: false
+    methanol:
+      e_biomethanol: false
+    EU_liquid_fuel_policy: false
+9-no-mid-0-400-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 400 
+    electrobiofuels: false
+    e_bioSNG: false
+    methanol:
+      e_biomethanol: false
+    EU_liquid_fuel_policy: false
+9-no-mid-0-600-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 600 
+    electrobiofuels: false
+    e_bioSNG: false
+    methanol:
+      e_biomethanol: false
+    EU_liquid_fuel_policy: false
+9-no-mid-0-800-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 800 
+    electrobiofuels: false
+    e_bioSNG: false
+    methanol:
+      e_biomethanol: false
+    EU_liquid_fuel_policy: false
+9-no-mid-0-1000-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 1000 
+    electrobiofuels: false
+    e_bioSNG: false
+    methanol:
+      e_biomethanol: false
+    EU_liquid_fuel_policy: false
+
+
+
+9-yes-mid-0-140-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 140 
+    electrobiofuels: true
+    e_bioSNG: true
+    methanol:
+      e_biomethanol: true
+    EU_liquid_fuel_policy: true
+9-yes-mid-0-200-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 200 
+    electrobiofuels: true
+    e_bioSNG: true
+    methanol:
+      e_biomethanol: true
+    EU_liquid_fuel_policy: true
+9-yes-mid-0-400-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 400 
+    electrobiofuels: true
+    e_bioSNG: true
+    methanol:
+      e_biomethanol: true
+    EU_liquid_fuel_policy: true
+9-yes-mid-0-600-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 600 
+    electrobiofuels: true
+    e_bioSNG: true
+    methanol:
+      e_biomethanol: true
+    EU_liquid_fuel_policy: true
+9-yes-mid-0-800-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 800 
+    electrobiofuels: true
+    e_bioSNG: true
+    methanol:
+      e_biomethanol: true
+    EU_liquid_fuel_policy: true
+9-yes-mid-0-1000-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 1000 
+    electrobiofuels: true
+    e_bioSNG: true
+    methanol:
+      e_biomethanol: true
+    EU_liquid_fuel_policy: true
+
+
+9-no-mid-0-140-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 140 
+    electrobiofuels: false
+    e_bioSNG: false
+    methanol:
+      e_biomethanol: false
+    EU_liquid_fuel_policy: true
+9-no-mid-0-200-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 200 
+    electrobiofuels: false
+    e_bioSNG: false
+    methanol:
+      e_biomethanol: false
+    EU_liquid_fuel_policy: true
+9-no-mid-0-400-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 400 
+    electrobiofuels: false
+    e_bioSNG: false
+    methanol:
+      e_biomethanol: false
+    EU_liquid_fuel_policy: true
+9-no-mid-0-600-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 600 
+    electrobiofuels: false
+    e_bioSNG: false
+    methanol:
+      e_biomethanol: false
+    EU_liquid_fuel_policy: true
+9-no-mid-0-800-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 800 
+    electrobiofuels: false
+    e_bioSNG: false
+    methanol:
+      e_biomethanol: false
+    EU_liquid_fuel_policy: true
+9-no-mid-0-1000-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 1000 
+    electrobiofuels: false
+    e_bioSNG: false
+    methanol:
+      e_biomethanol: false
+    EU_liquid_fuel_policy: true

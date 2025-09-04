@@ -1009,7 +1009,7 @@ clustering:
       ramp_limit_down: max
   temporal: #{false,``nH``; i.e. 2H-6H}
     resolution_elec: false
-    resolution_sector: 100H
+    resolution_sector: 1H
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#adjustments
 adjustments: #Multiply original value with given factor
