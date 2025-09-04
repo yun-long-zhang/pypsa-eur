@@ -677,3 +677,8 @@ plotting:
     shipping refining oil: '#cc9966'
     blue methanol 2: "#2E86AB"        # A deep blue
     grey methanol 2: "#7F8C8D"        # A neutral grey
+    H2 Electrolysis H2: "#e754c9"
+    biogas_to_methanol: "#7ec8e3"      
+    biogas_to_methanol cc: "#4682b4"   
+    biogas_to_methanol 2: "#5fa777"      
+    biogas_to_methanol cc 2: "#2f6d3a"    

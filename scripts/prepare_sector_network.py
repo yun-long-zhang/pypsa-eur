@@ -4108,6 +4108,63 @@ def add_biomass(
             lifetime=costs.at["biogas CC", "lifetime"],
         )
 
+    if options["biogas_to_methanol"]:
+        efficiency = costs.at["biogas-to-methanol", "methanol-output"]
+        efficiency2 = costs.at["biogas-to-methanol", "electricity-input"]
+        capital_cost = costs.at["biogas", "capital_cost"]
+        +efficiency * costs.at["methanolisation", "capital_cost"]
+        +efficiency2 * costs.at[
+            "electrolysis", "capital_cost"
+        ]  # rough cost estimation from adding up technology costs
+        marginal_cost = 0
+        if options.get("biogas_transport_cost", False):
+            marginal_cost += options["biogas_transport_cost"]
+        n.add(
+            "Link",
+            spatial.nodes + " biogas to methanol",
+            bus0=spatial.gas.biogas,
+            bus1=spatial.methanol.nodes,
+            bus2=spatial.nodes,
+            bus3="co2 atmosphere",
+            efficiency=efficiency,
+            efficiency2=-efficiency2,
+            efficiency3=-efficiency
+            * costs.at["methanolisation", "carbondioxide-input"],
+            carrier="biogas-to-methanol",
+            capital_cost=capital_cost,
+            p_nom_extendable=True,
+            marginal_cost=marginal_cost,
+        )
+
+        carbon_efficiency = costs.at["biogas-to-methanol", "carbon-efficiency"]
+        carbon_input = (
+            efficiency
+            * costs.at["methanolisation", "carbondioxide-input"]
+            / carbon_efficiency
+        )
+
+        carbon_cc = carbon_input * (1 - carbon_efficiency)
+
+        capital_cost_cc = capital_cost + costs.at["cement capture", "capital_cost"] * carbon_cc
+
+        n.add(
+            "Link",
+            spatial.nodes + " biogas to methanol CC",
+            bus0=spatial.gas.biogas,
+            bus1=spatial.methanol.nodes,
+            bus2=spatial.nodes,
+            bus3="co2 atmosphere",
+            bus4=spatial.co2.nodes,
+            efficiency=efficiency,
+            efficiency2=-efficiency2,
+            efficiency3=-carbon_input,
+            efficiency4=carbon_cc * costs.at["biomass CHP capture", "capture_rate"],
+            carrier="biogas-to-methanol CC",
+            capital_cost=capital_cost_cc,
+            p_nom_extendable=True,
+            marginal_cost=marginal_cost,
+        )
+
     if options["biomass_transport"]:
         # add biomass transport
         transport_costs = pd.read_csv(biomass_transport_costs_file, index_col=0)
@@ -6022,6 +6079,63 @@ def add_aviation(
             + (options.get("solid_biomass_transport_cost") or 0)
         ),
     )
+
+    if options["biogas_to_methanol"]:
+        efficiency = costs.at["biogas-to-methanol", "methanol-output"]
+        efficiency2 = costs.at["biogas-to-methanol", "electricity-input"]
+        capital_cost = costs.at["biogas", "capital_cost"]
+        +efficiency * costs.at["methanolisation", "capital_cost"]
+        +efficiency2 * costs.at[
+            "electrolysis", "capital_cost"
+        ]  # rough cost estimation from adding up technology costs
+        marginal_cost = 0
+        if options.get("biogas_transport_cost", False):
+            marginal_cost += options["biogas_transport_cost"]
+        n.add(
+            "Link",
+            spatial.nodes + " biogas to methanol 2",
+            bus0=spatial.gas.biogas,
+            bus1=spatial.methanol.green,
+            bus2=spatial.nodes,
+            bus3="co2 atmosphere",
+            efficiency=efficiency,
+            efficiency2=-efficiency2,
+            efficiency3=-efficiency
+            * costs.at["methanolisation", "carbondioxide-input"],
+            carrier="biogas-to-methanol",
+            capital_cost=capital_cost,
+            p_nom_extendable=True,
+            marginal_cost=marginal_cost,
+        )
+
+        carbon_efficiency = costs.at["biogas-to-methanol", "carbon-efficiency"]
+        carbon_input = (
+            efficiency
+            * costs.at["methanolisation", "carbondioxide-input"]
+            / carbon_efficiency
+        )
+
+        carbon_cc = carbon_input * (1 - carbon_efficiency)
+
+        capital_cost_cc = capital_cost + costs.at["cement capture", "capital_cost"] * carbon_cc
+
+        n.add(
+            "Link",
+            spatial.nodes + " biogas to methanol CC 2",
+            bus0=spatial.gas.biogas,
+            bus1=spatial.methanol.green,
+            bus2=spatial.nodes,
+            bus3="co2 atmosphere",
+            bus4=spatial.co2.nodes,
+            efficiency=efficiency,
+            efficiency2=-efficiency2,
+            efficiency3=-carbon_input,
+            efficiency4=carbon_cc * costs.at["biomass CHP capture", "capture_rate"],
+            carrier="biogas-to-methanol CC",
+            capital_cost=capital_cost_cc,
+            p_nom_extendable=True,
+            marginal_cost=marginal_cost,
+        )
 
     if options["methanol"]["e_biomethanol"]:
         

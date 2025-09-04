@@ -556,19 +556,22 @@ biochar pyrolysis,lifetime,25.0,years,"Danish Energy Agency, inputs/data_sheets_
 biochar pyrolysis,yield-biochar,0.0582,ton biochar/MWh_feedstock,"Danish Energy Agency, inputs/data_sheets_for_renewable_fuels.xlsx","105 Slow pyrolysis, Straw:  yield biochar",2020.0
 biodiesel crops,fuel,137.5427,EUR/MWhth,"JRC ENSPRESO ca avg for MINBIORPS1 (rape seed), ENS_BaU_GFTM",,2010.0
 bioethanol crops,fuel,86.1222,EUR/MWhth,"JRC ENSPRESO ca avg for MINBIOCRP11 (Bioethanol barley, wheat, grain maize, oats, other cereals and rye), ENS_BaU_GFTM",,2010.0
-biogas,CO2 stored,0.0868,tCO2/MWh_th,"Stoichiometric calculation, doi:10.1016/j.apenergy.2022.120016",,
+biogas,CO2 stored,0.12,tCO2/MWh_th,"Stoichiometric calculation, doi:10.1016/j.apenergy.2022.120016",,
 biogas,FOM,7.7769,%/year,"Danish Energy Agency, inputs/data_sheets_for_renewable_fuels.xlsx","81 Biogas, Basic plant, small:  Total O&M",2020.0
 biogas,capture rate,0.9,per unit,Assumption based on doi:10.1016/j.biombioe.2015.01.006,,
 biogas,efficiency,1.0,per unit,Assuming input biomass is already given in biogas output,,
 biogas,fuel,62.4351,EUR/MWhth,JRC and Zappa, from old pypsa cost assumptions,2015.0
 biogas,investment,922.249,EUR/kW,"Danish Energy Agency, inputs/data_sheets_for_renewable_fuels.xlsx","81 Biogas, Basic plant, small:  Specific investment",2020.0
 biogas,lifetime,20.0,years,"Danish Energy Agency, inputs/data_sheets_for_renewable_fuels.xlsx","81 Biogas, Basic plant, small:  Technical lifetime",2020.0
-biogas CC,CO2 stored,0.0868,tCO2/MWh_th,"Stoichiometric calculation, doi:10.1016/j.apenergy.2022.120016",,
+biogas CC,CO2 stored,0.12,tCO2/MWh_th,"Stoichiometric calculation, doi:10.1016/j.apenergy.2022.120016",,
 biogas CC,FOM,7.7769,%/year,"Danish Energy Agency, inputs/data_sheets_for_renewable_fuels.xlsx","81 Biogas, Basic plant, small:  Total O&M",2020.0
 biogas CC,capture rate,0.9,per unit,Assumption based on doi:10.1016/j.biombioe.2015.01.006,,
 biogas CC,efficiency,1.0,per unit,Assuming input biomass is already given in biogas output,,
 biogas CC,investment,922.249,EUR/kW,"Danish Energy Agency, inputs/data_sheets_for_renewable_fuels.xlsx","81 Biogas, Basic plant, small:  Specific investment",2020.0
 biogas CC,lifetime,20.0,years,"Danish Energy Agency, inputs/data_sheets_for_renewable_fuels.xlsx","81 Biogas, Basic plant, small:  Technical lifetime",2020.0
+biogas-to-methanol,methanol-output,1.254,per unit,"The Minimal Methanol Economy as a Gap-Filler for High Electrification Scenarios",,
+biogas-to-methanol,carbon-efficiency,0.93,per unit,"The Minimal Methanol Economy as a Gap-Filler for High Electrification Scenarios",,
+biogas-to-methanol,electricity-input,0.695,MWh_e/MWh_th,"The Minimal Methanol Economy as a Gap-Filler for High Electrification Scenarios",,
 biogas manure,fuel,19.8782,EUR/MWhth,"JRC ENSPRESO ca avg for MINBIOGAS1 (manure), ENS_BaU_GFTM",,2010.0
 biogas plus hydrogen,FOM,4.0,%/year,"Danish Energy Agency, inputs/data_sheets_for_renewable_fuels.xlsx",99 SNG from methan. of biogas:  Fixed O&M,2020.0
 biogas plus hydrogen,VOM,3.0626,EUR/MWh_CH4,"Danish Energy Agency, inputs/data_sheets_for_renewable_fuels.xlsx",99 SNG from methan. of biogas:  Variable O&M,2020.0
