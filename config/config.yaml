@@ -1057,7 +1057,7 @@ solving:
       fractional_last_unit_size: false
     keep_files: false
     model_kwargs:
-      solver_dir: "/tmp"
+      solver_dir: ""
 
   agg_p_nom_limits:
     agg_offwind: false  #Aggregate together all the types of offwind when writing the constraint. Default is false.
