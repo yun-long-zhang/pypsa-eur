@@ -18,10 +18,11 @@ remote:
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#run
 run:
   prefix: ""
-  name: "9-yes-mid-0-140-nopolicy" #all
+  name: all
+  #"9-yes-mid-0-140-nopolicy" #all
   #- test-elec-no-onshore-wind
   scenarios:
-    enable: false
+    enable: true
     file: config/scenarios.yaml
   disable_progressbar: true
   shared_resources:
@@ -946,7 +947,7 @@ industry:
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#costs
 costs:
-  file: "costs_2040.csv"  # 2 Update this to your specific cost file path
+  file: "resources/costs_2040.csv"  # 2 Update this to your specific cost file path
   year: 2040
   version: v0.11.0 #vX.X.X or <user>/<repo>/vX.X.X; e.g. ‘v0.5.0’
   #Version of technology-data repository to use. If this string is of the form <user>/<repo>/<version> 
@@ -1004,7 +1005,7 @@ clustering:
   consider_efficiency_classes: false
   aggregation_strategies: # if sum, then all values within each cluster are summed to represent the new bus.
     generators:
-      committable: any9
+      committable: any
       ramp_limit_up: max #one of {min, max, sum
       ramp_limit_down: max
   temporal: #{false,``nH``; i.e. 2H-6H}

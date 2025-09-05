@@ -210,7 +210,13 @@ def mute_print():
     with open(os.devnull, "w") as devnull:
         with contextlib.redirect_stdout(devnull):
             yield
-
+def deep_update_config(config, scenario_config):
+    for k, v in scenario_config.items():
+        if isinstance(v, dict) and k in config and isinstance(config[k], dict):
+            deep_update_config(config[k], v)
+        else:
+            config[k] = v
+    return config
 
 def set_scenario_config(snakemake):
     scenario = snakemake.config["run"].get("scenarios", {})
@@ -224,7 +230,7 @@ def set_scenario_config(snakemake):
             root_dir = script_dir.parent
             with open(root_dir / scenario["file"]) as f:
                 scenario_config = yaml.safe_load(f)
-        update_config(snakemake.config, scenario_config[snakemake.wildcards.run])
+        deep_update_config(snakemake.config, scenario_config[snakemake.wildcards.run])
 
 
 def configure_logging(snakemake, skip_handlers=False):
