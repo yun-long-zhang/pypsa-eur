@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-CONFIGS=("config1.yaml" "config2.yaml" "config3.yaml" "config4.yaml")
+CONFIGS=("config1 copy.yaml" "config2 copy.yaml")
 
 for cfg in $CONFIGS; do
     echo "Running with $cfg"
