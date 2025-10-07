@@ -718,7 +718,7 @@ sector:
     biomass_to_methanol: true
     biomass_to_methanol_cc: true
     e_biomethanol: false
-  H2_network: true
+  H2_network: false
   H2_retrofit: false  # if set to True existing gas pipes can be retrofitted to H2 pipes
   # according to hydrogen backbone strategy (April, 2020) p.15
   # https://gasforclimate2050.eu/wp-content/uploads/2020/07/2020_European-Hydrogen-Backbone_Report.pdf
@@ -732,7 +732,7 @@ sector:
   co2_spatial: true  #Add option to spatially resolve carrier representing stored carbon dioxide. 
   #This allows for more detailed modelling of CCUTS, e.g. regarding the capturing of industrial process emissions, 
   #usage as feedstock for electrofuels, transport of carbon dioxide, and geological sequestration sites.
-  co2_network: true     #Add option for planning a new carbon dioxide transmission network
+  co2_network: false     #Add option for planning a new carbon dioxide transmission network
   co2_network_cost_factor: 1 #The cost factor for the capital cost of the carbon dioxide transmission network
   solid_biomass_transport_cost: true
   ammonia: true  # can be false (no NH3 carrier), true (copperplated NH3), "regional" (regionalised NH3 without network)

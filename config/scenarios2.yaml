@@ -13,27 +13,31 @@
 
 
 
-8-no-network-0-140-nopolicy: 
+8-no-nonetwork-0-140-nopolicy: 
   sector:
     co2_sequestration_potential:
       2050: 140 
-8-no-network-0-200-nopolicy: 
+8-no-nonetwork-0-200-nopolicy: 
   sector:
     co2_sequestration_potential:
       2050: 200 
-8-no-network-0-400-nopolicy: 
+8-no-nonetwork-0-250-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 250 
+8-no-nonetwork-0-400-nopolicy: 
   sector:
     co2_sequestration_potential:
       2050: 400 
-8-no-network-0-600-nopolicy: 
+8-no-nonetwork-0-600-nopolicy: 
   sector:
     co2_sequestration_potential:
       2050: 600 
-8-no-network-0-800-nopolicy: 
+8-no-nonetwork-0-800-nopolicy: 
   sector:
     co2_sequestration_potential:
       2050: 800 
-8-no-network-0-1000-nopolicy: 
+8-no-nonetwork-0-1000-nopolicy: 
   sector:
     co2_sequestration_potential:
       2050: 1000 
