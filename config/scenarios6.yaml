@@ -17,6 +17,10 @@
   sector:
     co2_sequestration_potential:
       2050: 0 
+8-yes-nonetwork-0.9-100-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 100 
 8-yes-nonetwork-0.9-200-nopolicy: 
   sector:
     co2_sequestration_potential:
@@ -25,3 +29,7 @@
   sector:
     co2_sequestration_potential:
       2050: 250 
+8-yes-nonetwork-0.9-300-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 300 

@@ -237,6 +237,132 @@ def add_solar_potential_constraints(n: pypsa.Network, config: dict) -> None:
     logger.info("Adding solar potential constraint.")
     n.model.add_constraints(lhs <= rhs, name="solar_potential")
 
+def add_aviation_fuels_constraint(n):
+    """
+    Add constraint to limit aviation fossil fuel usage to maximum 30% of total aviation fuel demand.
+    
+    Parameters
+    ----------
+    n : pypsa.Network
+        The PyPSA network instance
+    """
+    
+    # Find aviation fuel demand (loads with kerosene for aviation)
+    aviation_loads = n.loads.query('carrier == "kerosene for aviation"').index
+    if aviation_loads.empty:
+        logger.warning("No kerosene for aviation loads found. Skipping aviation fuels constraint.")
+        return
+    
+    # Calculate total aviation fuel demand
+    # Check if aviation loads exist in time-varying data
+    aviation_loads_in_time_series = aviation_loads.intersection(n.loads_t.p_set.columns)
+    
+    if len(aviation_loads_in_time_series) > 0:
+        # Time-varying demand
+        total_aviation_demand = n.loads_t.p_set[aviation_loads_in_time_series].sum().sum()
+        # Add static demand for loads not in time series
+        static_aviation_loads = aviation_loads.difference(aviation_loads_in_time_series)
+        if len(static_aviation_loads) > 0:
+            total_aviation_demand += n.loads.loc[static_aviation_loads, 'p_set'].sum() * len(n.snapshots)
+    else:
+        # All loads are static
+        total_aviation_demand = n.loads.loc[aviation_loads, 'p_set'].sum() * len(n.snapshots)
+    
+    print(f'Total aviation fuel demand: {total_aviation_demand}')
+    
+    # Find fossil fuel links that produce aviation fuel (refining-oil-to-kerosene)
+    fossil_aviation_links = n.links.query('carrier == "refining-oil-to-kerosene"').index
+    if fossil_aviation_links.empty:
+        logger.warning("No fossil aviation fuel links found. Skipping aviation fuels constraint.")
+        return
+    
+    print(f'Fossil aviation links found: {fossil_aviation_links}')
+    
+    # Get fossil aviation fuel production variables
+    fossil_aviation_vars = n.model["Link-p"].loc[:, fossil_aviation_links]
+    
+    # Calculate left-hand side: total fossil aviation fuel production
+    lhs = fossil_aviation_vars.sum()
+    
+    # Right-hand side: 30% of total aviation demand
+    aviation_fossil_limit = 0.3 * total_aviation_demand
+    
+    print(f'Aviation fossil fuel limit (30% of demand): {aviation_fossil_limit}')
+    
+    # Add constraint: fossil aviation fuel production <= 30% of demand
+    n.model.add_constraints(lhs <= aviation_fossil_limit, name='aviation_fossil_fuel_limit')
+    
+    logger.info(f"Added aviation fossil fuel constraint: fossil production <= {aviation_fossil_limit:.2f}")
+
+def add_shipping_fuels_constraint(n):
+    """
+    Add constraint to limit shipping fossil fuel usage to maximum 20% of total shipping fuel demand.
+    
+    Parameters
+    ----------
+    n : pypsa.Network
+        The PyPSA network instance
+    """
+    
+    # Find all shipping fuel demand (both oil and methanol)
+    shipping_oil_loads = n.loads.query('carrier == "shipping oil"').index
+    shipping_methanol_loads = n.loads.query('carrier == "shipping methanol"').index
+    all_shipping_loads = shipping_oil_loads.union(shipping_methanol_loads)
+    
+    if all_shipping_loads.empty:
+        logger.warning("No shipping fuel loads found. Skipping shipping fuels constraint.")
+        return
+    
+    # Calculate total shipping fuel demand (oil + methanol)
+    total_shipping_demand = 0
+    
+    # Calculate shipping oil demand
+    if len(shipping_oil_loads) > 0:
+        shipping_oil_in_time_series = shipping_oil_loads.intersection(n.loads_t.p_set.columns)
+        if len(shipping_oil_in_time_series) > 0:
+            total_shipping_demand += n.loads_t.p_set[shipping_oil_in_time_series].sum().sum()
+            static_oil_loads = shipping_oil_loads.difference(shipping_oil_in_time_series)
+            if len(static_oil_loads) > 0:
+                total_shipping_demand += n.loads.loc[static_oil_loads, 'p_set'].sum() * len(n.snapshots)
+        else:
+            total_shipping_demand += n.loads.loc[shipping_oil_loads, 'p_set'].sum() * len(n.snapshots)
+    
+    # Calculate shipping methanol demand
+    if len(shipping_methanol_loads) > 0:
+        shipping_methanol_in_time_series = shipping_methanol_loads.intersection(n.loads_t.p_set.columns)
+        if len(shipping_methanol_in_time_series) > 0:
+            total_shipping_demand += n.loads_t.p_set[shipping_methanol_in_time_series].sum().sum()
+            static_methanol_loads = shipping_methanol_loads.difference(shipping_methanol_in_time_series)
+            if len(static_methanol_loads) > 0:
+                total_shipping_demand += n.loads.loc[static_methanol_loads, 'p_set'].sum() * len(n.snapshots)
+        else:
+            total_shipping_demand += n.loads.loc[shipping_methanol_loads, 'p_set'].sum() * len(n.snapshots)
+    
+    print(f'Total shipping fuel demand (oil + methanol): {total_shipping_demand}')
+    
+    # Find fossil fuel links that produce shipping fuel (shipping refining oil)
+    fossil_shipping_links = n.links.query('carrier == "shipping refining oil"').index
+    if fossil_shipping_links.empty:
+        logger.warning("No fossil shipping fuel links found. Skipping shipping fuels constraint.")
+        return
+    
+    print(f'Fossil shipping links found: {fossil_shipping_links}')
+    
+    # Get fossil shipping fuel production variables
+    fossil_shipping_vars = n.model["Link-p"].loc[:, fossil_shipping_links]
+    
+    # Calculate left-hand side: total fossil shipping fuel production
+    lhs = fossil_shipping_vars.sum()
+    
+    # Right-hand side: 20% of total shipping demand (oil + methanol)
+    shipping_fossil_limit = 0.2 * total_shipping_demand
+    
+    print(f'Shipping fossil oil limit (20% of total shipping demand): {shipping_fossil_limit}')
+    
+    # Add constraint: fossil shipping oil production <= 20% of total shipping demand
+    n.model.add_constraints(lhs <= shipping_fossil_limit, name='shipping_fossil_fuel_limit')
+    
+    logger.info(f"Added shipping fossil fuel constraint: fossil oil production <= {shipping_fossil_limit:.2f} (20% of total shipping demand)")
 
 def add_co2_sequestration_limit(
     n: pypsa.Network,
@@ -1199,6 +1325,14 @@ def extra_functionality(
 
     if config["sector"]["imports"]["enable"]:
         add_import_limit_constraint(n, snapshots)
+
+    # Add EU liquid fuel policy constraints if enabled
+    if config["sector"].get("EU_liquid_fuel_policy", False):
+        # Add aviation fossil fuel constraint (30% limit)
+        add_aviation_fuels_constraint(n)
+        
+        # Add shipping fossil fuel constraint (20% limit)
+        add_shipping_fuels_constraint(n)
 
     if n.params.custom_extra_functionality:
         source_path = n.params.custom_extra_functionality

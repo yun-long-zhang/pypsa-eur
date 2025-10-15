@@ -676,7 +676,7 @@ sector:
   regional_oil_demand: true  #Spatially resolve oil demand. Set to true if regional CO2 constraints needed.
   regional_coal_demand: false
   regional_co2_sequestration_potential:  #Add option for regionally-resolved geological carbon dioxide sequestration potentials based on CO2StoP.
-    enable: true
+    enable: false
     attribute:
     - conservative estimate Mt
     - conservative estimate GAS Mt
@@ -729,7 +729,7 @@ sector:
   e_bioSNG: true
   EU_liquid_fuel_policy: false # whether to consider the EU liquid fuel policy for aviation
   oil_cracking: true
-  co2_spatial: true  #Add option to spatially resolve carrier representing stored carbon dioxide. 
+  co2_spatial: false  #Add option to spatially resolve carrier representing stored carbon dioxide. 
   #This allows for more detailed modelling of CCUTS, e.g. regarding the capturing of industrial process emissions, 
   #usage as feedstock for electrofuels, transport of carbon dioxide, and geological sequestration sites.
   co2_network: false     #Add option for planning a new carbon dioxide transmission network

@@ -12,9 +12,12 @@
 #       renewable_carriers: [wind, solar] # override the list of renewable carriers
 
 
-
 8-yes-nonetwork-1.1-600-nopolicy: 
   sector:
     co2_sequestration_potential:
       2050: 600
+8-yes-nonetwork-1.1-700-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 700
 

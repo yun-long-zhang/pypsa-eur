@@ -727,6 +727,7 @@ sector:
   biogas_transport_cost: 0.7 # €/MWh/km For biogas distribution via pipelines, costs are around 7 €/MWh for a 10 km distance.  doi:10.1080/17597269.2024.2318515.
   electrobiofuels: true
   e_bioSNG: true
+  
   EU_liquid_fuel_policy: false # whether to consider the EU liquid fuel policy for aviation
   oil_cracking: true
   co2_spatial: false  #Add option to spatially resolve carrier representing stored carbon dioxide. 
