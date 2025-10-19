@@ -270,8 +270,9 @@ def add_aviation_fuels_constraint(n):
     
     print(f'Total aviation fuel demand: {total_aviation_demand}')
     
-    # Find fossil fuel links that produce aviation fuel (refining-oil-to-kerosene)
-    fossil_aviation_links = n.links.query('carrier == "refining-oil-to-kerosene"').index
+    # Find fossil fuel links that produce aviation fuel (includes oil refining and grey/blue methanol routes)
+    fossil_aviation_carriers = ["refining-oil-to-kerosene", "grey-methanol-to-kerosene", "blue-methanol-to-kerosene"]
+    fossil_aviation_links = n.links.query('carrier.isin(@fossil_aviation_carriers)').index
     if fossil_aviation_links.empty:
         logger.warning("No fossil aviation fuel links found. Skipping aviation fuels constraint.")
         return
@@ -340,8 +341,9 @@ def add_shipping_fuels_constraint(n):
     
     print(f'Total shipping fuel demand (oil + methanol): {total_shipping_demand}')
     
-    # Find fossil fuel links that produce shipping fuel (shipping refining oil)
-    fossil_shipping_links = n.links.query('carrier == "shipping refining oil"').index
+    # Find fossil fuel links that produce shipping fuel (includes oil refining and grey/blue methanol routes)
+    fossil_shipping_carriers = ["shipping refining oil", "shipping-grey-methanol", "shipping-blue-methanol"]
+    fossil_shipping_links = n.links.query('carrier.isin(@fossil_shipping_carriers)').index
     if fossil_shipping_links.empty:
         logger.warning("No fossil shipping fuel links found. Skipping shipping fuels constraint.")
         return

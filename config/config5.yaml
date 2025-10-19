@@ -137,7 +137,7 @@ electricity:
   autarky:
     enable: false  #Require each node to be autarkic by removing all lines and links.
     by_country: false  #Require each country to be autarkic by removing all cross-border lines and links. electricity: autarky must be enabled.
-  transmission_limit: vopt
+  transmission_limit: v1.5
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#atlite
 atlite:
   cutout_directory: cutouts

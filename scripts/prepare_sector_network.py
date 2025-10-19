@@ -638,7 +638,7 @@ def add_carrier_buses(
                 bus2="co2 atmosphere",
                 location=location,
                 carrier=carrier + " refining",
-                p_nom_extendable=True,
+                p_nom=1e6,
                 efficiency=1
                 - (
                     cf_industry["oil_refining_emissions"]
@@ -2344,7 +2344,7 @@ def add_storage_and_grids(
             - 0.45 * costs.at["methanol", "CO2 intensity"]
         )
         capital_cost = (
-            costs.at["SMR", "capital_cost"]*0.05
+            costs.at["SMR", "capital_cost"]
             + costs.at["methanolisation", "capital_cost"]
             * 0.45
             + costs.at["cement capture", "capital_cost"]
@@ -6011,11 +6011,11 @@ def add_aviation(
         "Link",
         nodes + " refining 2",
         bus0=nodes + " primary 2",
-        bus1=nodes,
+        bus1=spatial.oil.fossil,
         bus2="co2 atmosphere",
         location=nodes,
         carrier="oil refining 2",
-        p_nom_extendable=True,
+        p_nom=1e6,
         efficiency=1 - (cf_industry["oil_refining_emissions"] / costs.at["oil", "CO2 intensity"]),
         efficiency2=cf_industry["oil_refining_emissions"],
         
@@ -6242,39 +6242,12 @@ def add_aviation(
             p_set = p_set.rename(lambda x: x + " kerosene for aviation"),
         )
 
-        # if options["EU_liquid_fuel_policy"]:
-        #     n.add(
-        #         "Link",
-        #         spatial.oil.kerosene,
-        #         suffix=" from fossil oil",
-        #         bus0 = spatial.oil.fossil,
-        #         bus1 = spatial.oil.kerosene,
-        #         bus2 = "co2 atmosphere",
-        #         carrier = "refining-oil-to-kerosene",
-        #         p_nom_extendable = False,
-        #         p_nom=2180,
-        #         p_max_pu=1.0,
-        #         efficiency=1.0,
-        #         efficiency2 = costs.at["oil", "CO2 intensity"],
-        #     )
-        # else:
-        #     n.add(
-        #         "Link",
-        #         spatial.oil.kerosene,
-        #         suffix=" from fossil oil",
-        #         bus0 = spatial.oil.fossil,
-        #         bus1 = spatial.oil.kerosene,
-        #         bus2 = "co2 atmosphere",
-        #         carrier = "refining-oil-to-kerosene",
-        #         p_nom_extendable = True,
-        #         efficiency=1.0,
-        #         efficiency2 = costs.at["oil", "CO2 intensity"],
-        #     )
+        
         n.add(
                 "Link",
                 spatial.oil.kerosene,
                 suffix=" from fossil oil",
-                bus0 = nodes,
+                bus0 = spatial.oil.fossil,
                 bus1 = spatial.oil.kerosene,
                 bus2 = "co2 atmosphere",
                 carrier = "refining-oil-to-kerosene",
@@ -6397,7 +6370,7 @@ def add_aviation(
                 "Link",
                 spatial.oil.aviation,
                 suffix=" from fossil oil",
-                bus0 = nodes,
+                bus0 = spatial.oil.fossil,
                 bus1 = spatial.oil.aviation,
                 bus2 = "co2 atmosphere",
                 carrier = "refining-oil-to-kerosene",
@@ -6763,40 +6736,11 @@ def add_shipping(
             p_set = p_set_oil_shipping,
         )
 
-        # if options["EU_liquid_fuel_policy"]:
-        #     n.add(
-        #         "Link",
-        #         spatial.oil.shipping,
-        #         suffix=" from fossil oil",
-        #         bus0 = spatial.oil.fossil,
-        #         bus1 = spatial.oil.shipping,
-        #         bus2 = "co2 atmosphere",
-        #         carrier = "shipping refining oil",
-        #         p_nom_extendable = False,
-        #         p_nom = 960,
-        #         p_max_pu = 1.0,
-        #         efficiency = 1.0,
-        #         efficiency2 = costs.at["oil", "CO2 intensity"],
-        #     )
-        # else:
-        #     n.add(
-        #         "Link",
-        #         spatial.oil.shipping,
-        #         suffix=" from fossil oil",
-        #         bus0 = spatial.oil.fossil,
-        #         bus1 = spatial.oil.shipping,
-        #         bus2 = "co2 atmosphere",
-        #         carrier = "shipping refining oil",
-        #         p_nom_extendable=True,
-        #         efficiency = 1.0,
-        #         efficiency2 = costs.at["oil", "CO2 intensity"],
-        #     )
-
         n.add(
                 "Link",
                 spatial.oil.shipping,
                 suffix=" from fossil oil",
-                bus0 = nodes,
+                bus0 = spatial.oil.fossil,
                 bus1 = spatial.oil.shipping,
                 bus2 = "co2 atmosphere",
                 carrier = "shipping refining oil",
