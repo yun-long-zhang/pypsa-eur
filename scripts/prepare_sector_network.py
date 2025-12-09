@@ -167,11 +167,12 @@ def define_spatial(nodes, options):
 
     spatial.methanol = SimpleNamespace()
 
-    spatial.methanol.nodes = ["EU methanol"]
-    spatial.methanol.locations = ["EU"]
+    
 
     if options["methanol"]["regional_methanol_demand"]:
         spatial.methanol.demand_locations = nodes
+        spatial.methanol.nodes = nodes + " methanol"
+        spatial.methanol.locations = nodes
         spatial.methanol.industry = nodes + " industry methanol"
         spatial.methanol.shipping = nodes + " shipping methanol"
         spatial.methanol.aviation = nodes + " aviation methanol"
@@ -179,6 +180,8 @@ def define_spatial(nodes, options):
         spatial.methanol.grey = nodes + " grey methanol"
         spatial.methanol.blue = nodes + " blue methanol"
     else:
+        spatial.methanol.nodes = ["EU methanol"]
+        spatial.methanol.locations = ["EU"]
         spatial.methanol.demand_locations = ["EU"]
         spatial.methanol.shipping = ["EU shipping methanol"]
         spatial.methanol.industry = ["EU industry methanol"]
@@ -190,10 +193,12 @@ def define_spatial(nodes, options):
     # oil
     spatial.oil = SimpleNamespace()
 
-    spatial.oil.nodes = ["EU oil"]
-    spatial.oil.locations = ["EU"]
+    # spatial.oil.nodes = ["EU oil"]
+    # spatial.oil.locations = ["EU"]
 
     if options["regional_oil_demand"]:
+        spatial.oil.nodes = nodes + " oil"
+        spatial.oil.locations = nodes
         spatial.oil.demand_locations = nodes
         spatial.oil.naphtha = nodes + " naphtha for industry"
         spatial.oil.HVC = nodes + " HVC for industry"
@@ -205,6 +210,8 @@ def define_spatial(nodes, options):
         spatial.oil.agriculture_machinery = nodes + " agriculture machinery oil"
         spatial.oil.land_transport = nodes + " land transport oil"
     else:
+        spatial.oil.nodes = ["EU oil"]
+        spatial.oil.locations = ["EU"]
         spatial.oil.demand_locations = ["EU"]
         spatial.oil.naphtha = ["EU naphtha for industry"]
         spatial.oil.HVC = ["EU HVC for industry"]
@@ -1005,7 +1012,7 @@ def add_biomass_to_methanol(n, costs):
 
     n.add(
         "Link",
-        spatial.biomass.nodes,
+        spatial.biomass.locations,
         suffix=" biomass-to-methanol",
         bus0=spatial.biomass.nodes,
         bus1=spatial.methanol.nodes,
@@ -1032,7 +1039,7 @@ def add_biomass_to_methanol_cc(n, costs):
 
     n.add(
         "Link",
-        spatial.biomass.nodes,
+        spatial.biomass.locations,
         suffix=" biomass-to-methanol CC",
         bus0=spatial.biomass.nodes,
         bus1=spatial.methanol.nodes,
@@ -1065,7 +1072,7 @@ def add_e_biomethanol(n, costs):
     if options["methanol"]["e_biomethanol"]:
         n.add(
             "Link",
-            spatial.biomass.nodes,
+            spatial.biomass.locations,
             suffix=" e-biomethanol",
             bus0=spatial.biomass.nodes,
             bus1=spatial.methanol.nodes,
@@ -1079,7 +1086,7 @@ def add_e_biomethanol(n, costs):
             efficiency3=-costs.at["solid biomass", "CO2 intensity"] + costs.at["biomass-to-methanol", "CO2 stored"] * (1 - costs.at["biomass-to-methanol", "capture rate"]),
             p_nom_extendable=True,
             capital_cost=costs.at["biomass-to-methanol", "capital_cost"]
-            * costs.at["biomass-to-methanol", "efficiency"] * 0.8,   #https://doi.org/10.1016/j.energy.2023.127202
+            * costs.at["biomass-to-methanol", "efficiency"] * 1.088709677 * (options.get("e_biofuels_cost_factor") or 1),   #https://doi.org/10.1016/j.energy.2023.127202
             marginal_cost=marginal_cost,
         )
 
@@ -4113,14 +4120,9 @@ def add_biomass(
         )
 
     if options["biogas_to_methanol"]:
-        efficiency = costs.at["biogas-to-methanol", "methanol-output"]
-        efficiency2 = costs.at["biogas-to-methanol", "electricity-input"]
-        capital_cost = costs.at["biogas", "capital_cost"]
-        +efficiency * costs.at["methanolisation", "capital_cost"]
-        +efficiency2 * costs.at[
-            "electrolysis", "capital_cost"
-        ]  # rough cost estimation from adding up technology costs
-        marginal_cost = 0
+        efficiency = costs.at["biogas-to-methanol", "efficiency-biogas"]
+        capital_cost = efficiency * costs.at["biogas-to-methanol", "capital_cost"]# https://doi.org/10.1016/j.enconman.2025.120052
+        marginal_cost = costs.at["biogas-to-methanol", "VOM"] * costs.at["biogas-to-methanol", "efficiency-biogas"]
         if options.get("biogas_transport_cost", False):
             marginal_cost += options["biogas_transport_cost"]
         n.add(
@@ -4128,47 +4130,34 @@ def add_biomass(
             spatial.gas.biogas_to_methanol,
             bus0=spatial.gas.biogas,
             bus1=spatial.methanol.nodes,
-            bus2=spatial.nodes,
-            bus3="co2 atmosphere",
+            bus2="co2 atmosphere",
             efficiency=efficiency,
-            efficiency2=-efficiency2,
-            efficiency3=-efficiency
-            * costs.at["methanolisation", "carbondioxide-input"],
+            efficiency2=-costs.at["biogas", "CO2 intensity"]
+            + costs.at["biogas-to-methanol", "CO2 stored"],
             carrier="biogas to methanol",
             capital_cost=capital_cost,
             p_nom_extendable=True,
             marginal_cost=marginal_cost,
         )
 
-        carbon_efficiency = costs.at["biogas-to-methanol", "carbon-efficiency"]
-        carbon_input = (
-            efficiency
-            * costs.at["methanolisation", "carbondioxide-input"]
-            / carbon_efficiency
-        )
-
-        carbon_cc = carbon_input * (1 - carbon_efficiency)
-
-        capital_cost_cc = capital_cost + costs.at["cement capture", "capital_cost"] * carbon_cc
+        capital_cost_cc = capital_cost + costs.at["cement capture", "capital_cost"] * costs.at["biogas-to-methanol", "CO2 stored"]
 
         n.add(
             "Link",
             spatial.gas.biogas_to_methanol_cc,
             bus0=spatial.gas.biogas,
             bus1=spatial.methanol.nodes,
-            bus2=spatial.nodes,
-            bus3="co2 atmosphere",
-            bus4=spatial.co2.nodes,
+            bus2="co2 atmosphere",
+            bus3=spatial.co2.nodes,
             efficiency=efficiency,
-            efficiency2=-efficiency2,
-            efficiency3=-carbon_input,
-            efficiency4=carbon_cc * costs.at["biomass CHP capture", "capture_rate"],
+            efficiency2=-costs.at["biogas", "CO2 intensity"]
+            + costs.at["biogas-to-methanol", "CO2 stored"] * (1 - costs.at["biogas-to-methanol", "capture rate"]),
+            efficiency3=costs.at["biogas-to-methanol", "CO2 stored"] * costs.at["biogas-to-methanol", "capture rate"],
             carrier="biogas to methanol CC",
             capital_cost=capital_cost_cc,
             p_nom_extendable=True,
             marginal_cost=marginal_cost,
         )
-
     if options["biomass_transport"]:
         # add biomass transport
         transport_costs = pd.read_csv(biomass_transport_costs_file, index_col=0)
@@ -4391,7 +4380,7 @@ def add_biomass(
             marginal_cost += options["solid_biomass_transport_cost"]
         n.add(
             "Link",
-            spatial.biomass.nodes,
+            spatial.biomass.locations,
             suffix=" biomass to liquid",
             bus0=spatial.biomass.nodes,
             bus1=spatial.oil.nodes,
@@ -4415,7 +4404,7 @@ def add_biomass(
             marginal_cost += options["solid_biomass_transport_cost"]
         n.add(
             "Link",
-            spatial.biomass.nodes,
+            spatial.biomass.locations,
             suffix=" biomass to liquid CC",
             bus0=spatial.biomass.nodes,
             bus1=spatial.oil.nodes,
@@ -4448,15 +4437,9 @@ def add_biomass(
         marginal_cost = costs.at["BtL", "VOM"] * costs.at["BtL", "efficiency"] * 1.5  #https://doi.org/10.1016/j.fuel.2018.08.004
         if options["solid_biomass_transport_cost"]:
             marginal_cost += options["solid_biomass_transport_cost"]
-        efuel_scale_factor = costs.at["BtL", "C stored"] * 0.9
-        name = (
-            pd.Index(spatial.biomass.nodes)
-            + " "
-            + pd.Index(spatial.h2.nodes.str.replace(" H2", ""))
-        )
         n.add(
             "Link",
-            name,
+            spatial.biomass.locations,
             suffix=" electrobiofuels",
             bus0=spatial.biomass.nodes,
             bus1=spatial.oil.nodes,
@@ -4467,7 +4450,7 @@ def add_biomass(
             efficiency=costs.at["electrobiofuels", "efficiency-biomass"],
             efficiency2=-costs.at["electrobiofuels", "efficiency-hydrogen-biomass"], 
             efficiency3=-costs.at["solid biomass", "CO2 intensity"] + costs.at["BtL", "CO2 stored"] * (1 - costs.at["BtL", "capture rate"]),
-            capital_cost=costs.at["BtL", "capital_cost"] * costs.at["BtL", "efficiency"] * 1.3,  #https://doi.org/10.1016/j.fuel.2018.08.004
+            capital_cost=costs.at["BtL", "capital_cost"] * costs.at["BtL", "efficiency"] * 1.025262061 * (options.get("e_biofuels_cost_factor") or 1),  #https://doi.org/10.1016/j.fuel.2018.08.004
             marginal_cost=marginal_cost,
             
         )
@@ -4479,7 +4462,7 @@ def add_biomass(
             marginal_cost += options["solid_biomass_transport_cost"]
         n.add(
             "Link",
-            spatial.biomass.nodes,
+            spatial.biomass.locations,
             suffix=" solid biomass to gas",
             bus0=spatial.biomass.nodes,
             bus1=spatial.gas.nodes,
@@ -4504,7 +4487,7 @@ def add_biomass(
             marginal_cost += options["solid_biomass_transport_cost"]
         n.add(
             "Link",
-            spatial.biomass.nodes,
+            spatial.biomass.locations,
             suffix=" solid biomass to gas CC",
             bus0=spatial.biomass.nodes,
             bus1=spatial.gas.nodes,
@@ -4546,7 +4529,7 @@ def add_biomass(
         )
         n.add(
             "Link",
-            name,
+            spatial.biomass.locations,
             suffix=" e-bioSNG",
             bus0=spatial.biomass.nodes,
             bus1=spatial.gas.nodes,
@@ -4560,13 +4543,13 @@ def add_biomass(
             #efficiency3=-costs.at["solid biomass", "CO2 intensity"] + costs.at["solid biomass", "CO2 intensity"]*(1-costs.at["e-bioSNG", "C in fuel"]),
             #efficiency3=-costs.at["solid biomass", "CO2 intensity"]* costs.at["electrobiofuels", "C in fuel"],
             p_nom_extendable=True,
-            capital_cost=costs.at["BioSNG", "capital_cost"] * costs.at["BioSNG", "efficiency"]  * 1.04,  #https://doi.org/10.1016/j.energy.2016.03.119
+            capital_cost=costs.at["BioSNG", "capital_cost"] * costs.at["BioSNG", "efficiency"]  * 1.04 * (options.get("e_biofuels_cost_factor") or 1),  #https://doi.org/10.1016/j.energy.2016.03.119
             marginal_cost=marginal_cost,
         )
 
     if options["bioH2"]:
         name = (
-            pd.Index(spatial.biomass.nodes)
+            pd.Index(spatial.biomass.locations)
             + " "
             + pd.Index(spatial.h2.nodes.str.replace(" H2", ""))
         )
@@ -5915,7 +5898,7 @@ def add_aviation(
 
     n.add(
         "Link",
-        spatial.biomass.nodes,
+        spatial.biomass.locations,
         suffix= " biomass to liquid 2",
         bus0=spatial.biomass.nodes,
         bus1=spatial.oil.green,
@@ -5931,7 +5914,7 @@ def add_aviation(
     )
     n.add(
         "Link",
-        spatial.biomass.nodes,
+        spatial.biomass.locations,
         suffix=" biomass to liquid CC 2",
         bus0=spatial.biomass.nodes,
         bus1=spatial.oil.green,
@@ -5953,7 +5936,7 @@ def add_aviation(
        
         n.add(
             "Link",
-            spatial.biomass.nodes,
+            spatial.biomass.locations,
             suffix=" electrobiofuels 2",
             bus0=spatial.biomass.nodes,
             bus1=spatial.oil.green,
@@ -5965,7 +5948,7 @@ def add_aviation(
             efficiency2=-costs.at["electrobiofuels", "efficiency-hydrogen-biomass"], #efficiency2=-(costs.at["electrobiofuels", "efficiency-biomass"]/costs.at["electrobiofuels", "efficiency-hydrogen-fuel"])
             efficiency3=-costs.at["solid biomass", "CO2 intensity"] + costs.at["BtL", "CO2 stored"] * (1 - costs.at["BtL", "capture rate"]),
             p_nom_extendable=True,
-            capital_cost=costs.at["BtL", "capital_cost"] * costs.at["BtL", "efficiency"] * 1.3,  #https://doi.org/10.1016/j.fuel.2018.08.004
+            capital_cost=costs.at["BtL", "capital_cost"] * costs.at["BtL", "efficiency"] * 1.025262061 * (options.get("e_biofuels_cost_factor") or 1),  #https://doi.org/10.1016/j.fuel.2018.08.004
             marginal_cost=(costs.at["BtL", "VOM"] * costs.at["BtL", "efficiency"] * 1.5 + (options.get("solid_biomass_transport_cost") or 0)),
             
         )
@@ -6039,7 +6022,7 @@ def add_aviation(
 
     n.add(
         "Link",
-        spatial.biomass.nodes,
+        spatial.biomass.locations,
         suffix=" biomass-to-methanol 2",
         bus0=spatial.biomass.nodes,
         bus1=spatial.methanol.green,  # CHANGED
@@ -6059,7 +6042,7 @@ def add_aviation(
     )
     n.add(
         "Link",
-        spatial.biomass.nodes,
+        spatial.biomass.locations,
         suffix=" biomass-to-methanol CC 2",
         bus0=spatial.biomass.nodes,
         bus1=spatial.methanol.green,  # CHANGED
@@ -6085,14 +6068,9 @@ def add_aviation(
     )
 
     if options["biogas_to_methanol"]:
-        efficiency = costs.at["biogas-to-methanol", "methanol-output"]
-        efficiency2 = costs.at["biogas-to-methanol", "electricity-input"]
-        capital_cost = costs.at["biogas", "capital_cost"]
-        +efficiency * costs.at["methanolisation", "capital_cost"]
-        +efficiency2 * costs.at[
-            "electrolysis", "capital_cost"
-        ]  # rough cost estimation from adding up technology costs
-        marginal_cost = 0
+        efficiency = costs.at["biogas-to-methanol", "efficiency-biogas"]
+        capital_cost = efficiency * costs.at["biogas-to-methanol", "capital_cost"]# https://doi.org/10.1016/j.enconman.2025.120052
+        marginal_cost = costs.at["biogas-to-methanol", "VOM"] * costs.at["biogas-to-methanol", "efficiency-biogas"]
         if options.get("biogas_transport_cost", False):
             marginal_cost += options["biogas_transport_cost"]
         n.add(
@@ -6100,52 +6078,63 @@ def add_aviation(
             spatial.gas.biogas_to_methanol_2,
             bus0=spatial.gas.biogas,
             bus1=spatial.methanol.green,
-            bus2=spatial.nodes,
-            bus3="co2 atmosphere",
+            bus2="co2 atmosphere",
             efficiency=efficiency,
-            efficiency2=-efficiency2,
-            efficiency3=-efficiency
-            * costs.at["methanolisation", "carbondioxide-input"],
+            efficiency2=-costs.at["biogas", "CO2 intensity"]
+            + costs.at["biogas-to-methanol", "CO2 stored"],
             carrier="biogas to methanol 2",
             capital_cost=capital_cost,
             p_nom_extendable=True,
             marginal_cost=marginal_cost,
         )
 
-        carbon_efficiency = costs.at["biogas-to-methanol", "carbon-efficiency"]
-        carbon_input = (
-            efficiency
-            * costs.at["methanolisation", "carbondioxide-input"]
-            / carbon_efficiency
-        )
-
-        carbon_cc = carbon_input * (1 - carbon_efficiency)
-
-        capital_cost_cc = capital_cost + costs.at["cement capture", "capital_cost"] * carbon_cc
+        capital_cost_cc = capital_cost + costs.at["cement capture", "capital_cost"] * costs.at["biogas-to-methanol", "CO2 stored"]
 
         n.add(
             "Link",
             spatial.gas.biogas_to_methanol_cc_2,
             bus0=spatial.gas.biogas,
             bus1=spatial.methanol.green,
-            bus2=spatial.nodes,
-            bus3="co2 atmosphere",
-            bus4=spatial.co2.nodes,
+            bus2="co2 atmosphere",
+            bus3=spatial.co2.nodes,
             efficiency=efficiency,
-            efficiency2=-efficiency2,
-            efficiency3=-carbon_input,
-            efficiency4=carbon_cc * costs.at["biomass CHP capture", "capture_rate"],
+            efficiency2=-costs.at["biogas", "CO2 intensity"]
+            + costs.at["biogas-to-methanol", "CO2 stored"] * (1 - costs.at["biogas-to-methanol", "capture rate"]),
+            efficiency3=costs.at["biogas-to-methanol", "CO2 stored"] * costs.at["biogas-to-methanol", "capture rate"],
             carrier="biogas to methanol CC 2",
             capital_cost=capital_cost_cc,
             p_nom_extendable=True,
             marginal_cost=marginal_cost,
+        )
+    if options["e_biogas_methanol"]:
+        
+        n.add(
+            "Link",
+            spatial.gas.locations,
+            suffix=" e-biogas-methanol 2",
+            bus0=spatial.gas.biogas,
+            bus1=spatial.methanol.green,  # CHANGED
+            bus2=nodes + " buffer H2",
+            bus3="co2 atmosphere",
+            carrier="e-biogas-methanol 2",
+            lifetime=costs.at["e-biogas-methanol", "lifetime"],
+            efficiency=costs.at["e-biogas-methanol", "efficiency-biogas"],
+            efficiency2=-costs.at["e-biogas-methanol", "efficiency-hydrogen-biogas"],
+            efficiency3=-costs.at["biogas", "CO2 intensity"] + costs.at["biogas-to-methanol", "CO2 stored"] * (1 - costs.at["biogas-to-methanol", "capture rate"]),
+            p_nom_extendable=True,
+            capital_cost=costs.at["e-biogas-methanol", "capital_cost"]
+            * costs.at["e-biogas-methanol", "efficiency-biogas"] * (options.get("e_biofuels_cost_factor") or 1),   #https://doi.org/10.1016/j.enconman.2025.120052
+            marginal_cost = (
+                costs.loc["e-biogas-methanol", "VOM"] * costs.at["e-biogas-methanol", "efficiency-biogas"]
+                + (options.get("solid_biomass_transport_cost") or 0)
+            ),
         )
 
     if options["methanol"]["e_biomethanol"]:
         
         n.add(
             "Link",
-            spatial.biomass.nodes,
+            spatial.biomass.locations,
             suffix=" e-biomethanol 2",
             bus0=spatial.biomass.nodes,
             bus1=spatial.methanol.green,  # CHANGED
@@ -6158,7 +6147,7 @@ def add_aviation(
             efficiency3=-costs.at["solid biomass", "CO2 intensity"] + costs.at["biomass-to-methanol", "CO2 stored"] * (1 - costs.at["biomass-to-methanol", "capture rate"]),
             p_nom_extendable=True,
             capital_cost=costs.at["biomass-to-methanol", "capital_cost"]
-            * costs.at["biomass-to-methanol", "efficiency"] * 0.8,   #https://doi.org/10.1016/j.energy.2023.127202
+            * costs.at["biomass-to-methanol", "efficiency"] * 1.088709677 * (options.get("e_biofuels_cost_factor") or 1),   #https://doi.org/10.1016/j.energy.2023.127202
             marginal_cost = (
                 costs.loc["biomass-to-methanol", "VOM"] * costs.at["biomass-to-methanol", "efficiency"] * 1.2
                 + (options.get("solid_biomass_transport_cost") or 0)
@@ -6832,7 +6821,10 @@ def add_waste_heat(
         #         0.95 - n.links.loc[urban_central + " Fischer-Tropsch", "efficiency"]
         #     ) * options["use_fischer_tropsch_waste_heat"]
 
-        if options["use_fischer_tropsch_waste_heat"]:
+        if (
+            options["use_fischer_tropsch_waste_heat"]
+            and "Fischer-Tropsch" in link_carriers
+        ):
             idx1 = urban_central + " Fischer-Tropsch"
             idx2 = urban_central + " Fischer-Tropsch 2"
             n.links.loc[idx1, "bus3"] = urban_central + " urban central heat"
@@ -6876,15 +6868,6 @@ def add_waste_heat(
             options["use_methanolisation_waste_heat"]
             and "methanolisation" in link_carriers
         ):
-            n.links.loc[urban_central + " methanolisation", "bus4"] = (
-                urban_central + " urban central heat"
-            )
-            n.links.loc[urban_central + " methanolisation", "efficiency4"] = (
-                costs.at["methanolisation", "heat-output"]
-                / costs.at["methanolisation", "hydrogen-input"]
-            ) * options["use_methanolisation_waste_heat"]
-
-        if options["use_methanolisation_waste_heat"]:
             idx1 = urban_central + " methanolisation"
             idx2 = urban_central + " methanolisation 2"
             n.links.loc[idx1, "bus4"] = urban_central + " urban central heat"
@@ -6919,7 +6902,155 @@ def add_waste_heat(
             n.links.loc[urban_central + " H2 Fuel Cell", "efficiency2"] = (
                 0.95 - n.links.loc[urban_central + " H2 Fuel Cell", "efficiency"]
             ) * options["use_fuel_cell_waste_heat"]
+        # Biomass to liquid waste heat
+        if options["use_biofuel_waste_heat"] and "biomass to liquid" in link_carriers:
+            idx1 = urban_central + " biomass to liquid"
+            idx2 = urban_central + " biomass to liquid 2"
+            n.links.loc[idx1, "bus3"] = urban_central + " urban central heat"
+            n.links.loc[idx1, "efficiency3"] = (
+                0.95 - n.links.loc[idx1, "efficiency"]
+            ) * options["use_biofuel_waste_heat"]
 
+            n.links.loc[idx2, "bus3"] = urban_central + " urban central heat"
+            n.links.loc[idx2, "efficiency3"] = (
+                0.95 - n.links.loc[idx2, "efficiency"]
+            ) * options["use_biofuel_waste_heat"]
+
+        # Biomass to liquid CC waste heat
+        if options["use_biofuel_waste_heat"] and "biomass to liquid CC" in link_carriers:
+            idx1 = urban_central + " biomass to liquid CC"
+            idx2 = urban_central + " biomass to liquid CC 2"
+            n.links.loc[idx1, "bus4"] = urban_central + " urban central heat"
+            n.links.loc[idx1, "efficiency4"] = (
+                0.95 - n.links.loc[idx1, "efficiency"]
+            ) * options["use_biofuel_waste_heat"]
+
+            n.links.loc[idx2, "bus4"] = urban_central + " urban central heat"
+            n.links.loc[idx2, "efficiency4"] = (
+                0.95 - n.links.loc[idx2, "efficiency"]
+            ) * options["use_biofuel_waste_heat"]
+
+        # Electrobiofuels waste heat
+        if options["use_biofuel_waste_heat"] and "electrobiofuels" in link_carriers:
+            idx1 = urban_central + " electrobiofuels"
+            idx2 = urban_central + " electrobiofuels 2"
+            n.links.loc[idx1, "bus4"] = urban_central + " urban central heat"
+            n.links.loc[idx1, "efficiency4"] = (
+                0.95 - costs.at['electrobiofuels', "efficiency-tot"]
+            ) * options["use_biofuel_waste_heat"] * (1 + costs.at['electrobiofuels', "efficiency-hydrogen-biomass"])
+
+            n.links.loc[idx2, "bus4"] = urban_central + " urban central heat"
+            n.links.loc[idx2, "efficiency4"] = (
+                0.95 - costs.at['electrobiofuels', "efficiency-tot"]
+            ) * options["use_biofuel_waste_heat"] * (1 + costs.at['electrobiofuels', "efficiency-hydrogen-biomass"])
+
+        # BioSNG waste heat
+        if options["use_biosng_waste_heat"] and "BioSNG" in link_carriers:
+            idx1 = urban_central + " solid biomass to gas"
+            n.links.loc[idx1, "bus3"] = urban_central + " urban central heat"
+            n.links.loc[idx1, "efficiency3"] = (
+                0.95 - n.links.loc[idx1, "efficiency"]
+            ) * options["use_biosng_waste_heat"]
+
+        # BioSNG CC waste heat
+        if options["use_biosng_waste_heat"] and "BioSNG CC" in link_carriers:
+            idx1 = urban_central + " solid biomass to gas CC"
+            n.links.loc[idx1, "bus3"] = urban_central + " urban central heat"
+            n.links.loc[idx1, "efficiency3"] = (
+                0.95 - n.links.loc[idx1, "efficiency"]
+            ) * options["use_biosng_waste_heat"]
+
+        # Biogas to methanol waste heat
+        if options["use_methanolisation_waste_heat"] and "biogas to methanol" in link_carriers:
+            idx1 = urban_central + " biogas to methanol"
+            idx2 = urban_central + " biogas to methanol 2"
+            n.links.loc[idx1, "bus3"] = urban_central + " urban central heat"
+            n.links.loc[idx1, "efficiency3"] = (
+                0.95 - n.links.loc[idx1, "efficiency"]
+            ) * options["use_methanolisation_waste_heat"]
+
+            n.links.loc[idx1, "bus3"] = urban_central + " urban central heat"
+            n.links.loc[idx1, "efficiency3"] = (
+                0.95 - n.links.loc[idx1, "efficiency"]
+            ) * options["use_methanolisation_waste_heat"]
+
+        # Biogas to methanol CC waste heat
+        if options["use_methanolisation_waste_heat"] and "biogas to methanol CC" in link_carriers:
+            idx1 = urban_central + " biogas to methanol CC"
+            idx2 = urban_central + " biogas to methanol CC 2"
+            n.links.loc[idx1, "bus4"] = urban_central + " urban central heat"
+            n.links.loc[idx1, "efficiency4"] = (
+                0.95 - n.links.loc[idx1, "efficiency"]
+            ) * options["use_methanolisation_waste_heat"]
+
+            n.links.loc[idx1, "bus4"] = urban_central + " urban central heat"
+            n.links.loc[idx1, "efficiency4"] = (
+                0.95 - n.links.loc[idx1, "efficiency"]
+            ) * options["use_methanolisation_waste_heat"]
+
+        # Biomass-to-methanol waste heat
+        if options["use_methanolisation_waste_heat"] and "biomass-to-methanol" in link_carriers:
+            idx1 = urban_central + " biomass-to-methanol"
+            idx2 = urban_central + " biomass-to-methanol 2"
+            n.links.loc[idx1, "bus3"] = urban_central + " urban central heat"
+            n.links.loc[idx1, "efficiency3"] = (
+                0.95 - n.links.loc[idx1, "efficiency"]
+            ) * options["use_methanolisation_waste_heat"]
+
+            n.links.loc[idx2, "bus3"] = urban_central + " urban central heat"
+            n.links.loc[idx2, "efficiency3"] = (
+                0.95 - n.links.loc[idx2, "efficiency"]
+            ) * options["use_methanolisation_waste_heat"]
+
+        # Biomass-to-methanol CC waste heat
+        if options["use_methanolisation_waste_heat"] and "biomass-to-methanol CC" in link_carriers:
+            idx1 = urban_central + " biomass-to-methanol CC"
+            idx2 = urban_central + " biomass-to-methanol CC 2"
+            n.links.loc[idx1, "bus4"] = urban_central + " urban central heat"
+            n.links.loc[idx1, "efficiency4"] = (
+                0.95 - n.links.loc[idx1, "efficiency"]
+            ) * options["use_methanolisation_waste_heat"]
+
+            n.links.loc[idx2, "bus4"] = urban_central + " urban central heat"
+            n.links.loc[idx2, "efficiency4"] = (
+                0.95 - n.links.loc[idx2, "efficiency"]
+            ) * options["use_methanolisation_waste_heat"]
+
+        # E-biomethanol waste heat
+        if options["use_methanolisation_waste_heat"] and "e-biomethanol" in link_carriers:
+            idx1 = urban_central + " e-biomethanol"
+            idx2 = urban_central + " e-biomethanol 2"
+            n.links.loc[idx1, "bus4"] = urban_central + " urban central heat"
+            n.links.loc[idx1, "efficiency4"] = (
+                0.95 - costs.at['e-biomethanol', "efficiency-tot"]
+            )  * options["use_methanolisation_waste_heat"]  * (1 + costs.at['e-biomethanol', "efficiency-hydrogen-biomass"])
+
+            n.links.loc[idx2, "bus4"] = urban_central + " urban central heat"
+            n.links.loc[idx2, "efficiency4"] = (
+                0.95 - costs.at['e-biomethanol', "efficiency-tot"]
+            )  * options["use_methanolisation_waste_heat"]  * (1 + costs.at['e-biomethanol', "efficiency-hydrogen-biomass"])
+
+        # E-biogas-methanol waste heat
+        if options["use_methanolisation_waste_heat"] and "e-biogas-methanol" in link_carriers:
+            idx1 = urban_central + " e-biogas-methanol"
+            idx2 = urban_central + " e-biogas-methanol 2"
+            n.links.loc[idx1, "bus4"] = urban_central + " urban central heat"
+            n.links.loc[idx1, "efficiency4"] = (
+                0.95 - costs.at['e-biogas-methanol', "efficiency-tot"]
+            ) * options["use_methanolisation_waste_heat"]  * (1 + costs.at['e-biogas-methanol', "efficiency-hydrogen-biogas"])
+
+            n.links.loc[idx2, "bus4"] = urban_central + " urban central heat"
+            n.links.loc[idx2, "efficiency4"] = (
+                0.95 - costs.at['e-biogas-methanol', "efficiency-tot"]
+            ) * options["use_methanolisation_waste_heat"]  * (1 + costs.at['e-biogas-methanol', "efficiency-hydrogen-biogas"])
+
+        # E-bioSNG waste heat
+        if options["use_biosng_waste_heat"] and "e-bioSNG" in link_carriers:
+            idx1 = urban_central + " e-bioSNG"
+            n.links.loc[idx1, "bus4"] = urban_central + " urban central heat"
+            n.links.loc[idx1, "efficiency4"] = (
+                0.95 - costs.at['e-bioSNG', "efficiency-tot"]
+            ) * options["use_biosng_waste_heat"]  * (1 + costs.at['e-bioSNG', "efficiency-hydrogen-biomass"])
 
 def add_agriculture(
     n: pypsa.Network,

@@ -12,20 +12,41 @@
 #       renewable_carriers: [wind, solar] # override the list of renewable carriers
 
 
-8-yes-nonetwork-1.1-600-nopolicy: 
-  sector:
-    co2_sequestration_potential:
-      2050: 600
-8-yes-nonetwork-1.1-700-nopolicy: 
-  sector:
-    co2_sequestration_potential:
-      2050: 700
-8-yes-nonetwork-1.1-800-nopolicy: 
-  sector:
-    co2_sequestration_potential:
-      2050: 800
-8-yes-nonetwork-1.1-1000-nopolicy: 
-  sector:
-    co2_sequestration_potential:
-      2050: 1000
 
+
+8-yes-nonetwork-C1.2-140-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 140 
+8-yes-nonetwork-C1.2-200-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 200 
+8-yes-nonetwork-C1.2-250-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 250 
+8-yes-nonetwork-C1.2-300-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 300 
+8-yes-nonetwork-C1.2-350-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 350 
+8-yes-nonetwork-C1.2-400-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 400 
+8-yes-nonetwork-C1.2-600-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 600 
+8-yes-nonetwork-C1.2-800-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 800 
+8-yes-nonetwork-C1.2-1000-policy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 1000 

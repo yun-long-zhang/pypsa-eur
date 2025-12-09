@@ -724,6 +724,8 @@ sector:
   # https://gasforclimate2050.eu/wp-content/uploads/2020/07/2020_European-Hydrogen-Backbone_Report.pdf
   # 60% of original natural gas capacity could be used in cost-optimal case as H2 capacity
   biogas_to_methanol: true
+  e_biogas_methanol: true
+  e_biofuels_cost_factor: 1.0  #The cost factor for e-biofuels investment costs
   biogas_transport_cost: 0.7 # €/MWh/km For biogas distribution via pipelines, costs are around 7 €/MWh for a 10 km distance.  doi:10.1080/17597269.2024.2318515.
   electrobiofuels: true
   e_bioSNG: true
@@ -746,6 +748,8 @@ sector:
   use_methanation_waste_heat: 0.25
   use_fuel_cell_waste_heat: 0.25
   use_electrolysis_waste_heat: 0.25
+  use_biofuel_waste_heat: 0.25
+  use_biosng_waste_heat: 0.25
   electricity_transmission_grid: true
   electricity_distribution_grid: true
   electricity_grid_connection: true

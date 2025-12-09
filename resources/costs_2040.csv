@@ -557,6 +557,7 @@ biochar pyrolysis,yield-biochar,0.0582,ton biochar/MWh_feedstock,"Danish Energy 
 biodiesel crops,fuel,137.5427,EUR/MWhth,"JRC ENSPRESO ca avg for MINBIORPS1 (rape seed), ENS_BaU_GFTM",,2010.0
 bioethanol crops,fuel,86.1222,EUR/MWhth,"JRC ENSPRESO ca avg for MINBIOCRP11 (Bioethanol barley, wheat, grain maize, oats, other cereals and rye), ENS_BaU_GFTM",,2010.0
 biogas,CO2 stored,0.12,tCO2/MWh_th,"Stoichiometric calculation, doi:10.1016/j.apenergy.2022.120016",,
+biogas,CO2 intensity,0.3291,tCO2/MWh_th,"Stoichiometric calculation, doi:10.1016/j.apenergy.2022.120016","based on biogas composition of 60% CH4 and 40% CO2",
 biogas,FOM,7.7769,%/year,"Danish Energy Agency, inputs/data_sheets_for_renewable_fuels.xlsx","81 Biogas, Basic plant, small:  Total O&M",2020.0
 biogas,capture rate,0.9,per unit,Assumption based on doi:10.1016/j.biombioe.2015.01.006,,
 biogas,efficiency,1.0,per unit,Assuming input biomass is already given in biogas output,,
@@ -569,9 +570,6 @@ biogas CC,capture rate,0.9,per unit,Assumption based on doi:10.1016/j.biombioe.2
 biogas CC,efficiency,1.0,per unit,Assuming input biomass is already given in biogas output,,
 biogas CC,investment,922.249,EUR/kW,"Danish Energy Agency, inputs/data_sheets_for_renewable_fuels.xlsx","81 Biogas, Basic plant, small:  Specific investment",2020.0
 biogas CC,lifetime,20.0,years,"Danish Energy Agency, inputs/data_sheets_for_renewable_fuels.xlsx","81 Biogas, Basic plant, small:  Technical lifetime",2020.0
-biogas-to-methanol,methanol-output,1.254,per unit,"The Minimal Methanol Economy as a Gap-Filler for High Electrification Scenarios",,
-biogas-to-methanol,carbon-efficiency,0.93,per unit,"The Minimal Methanol Economy as a Gap-Filler for High Electrification Scenarios",,
-biogas-to-methanol,electricity-input,0.695,MWh_e/MWh_th,"The Minimal Methanol Economy as a Gap-Filler for High Electrification Scenarios",,
 biogas manure,fuel,19.8782,EUR/MWhth,"JRC ENSPRESO ca avg for MINBIOGAS1 (manure), ENS_BaU_GFTM",,2010.0
 biogas plus hydrogen,FOM,4.0,%/year,"Danish Energy Agency, inputs/data_sheets_for_renewable_fuels.xlsx",99 SNG from methan. of biogas:  Fixed O&M,2020.0
 biogas plus hydrogen,VOM,3.0626,EUR/MWh_CH4,"Danish Energy Agency, inputs/data_sheets_for_renewable_fuels.xlsx",99 SNG from methan. of biogas:  Variable O&M,2020.0
@@ -850,7 +848,7 @@ e-bioSNG,VOM,2.0063,EUR/MWh_th,combination of bioSNG and electrofuels,,2017.0
 e-bioSNG,capture rate,0.9,per unit,Assumption based on doi:10.1016/j.biombioe.2015.01.006,,
 e-bioSNG,efficiency-biomass,1.7332,per unit,Stoichiometric calculation,,
 e-bioSNG,efficiency-hydrogen-biomass,1.5868,per unit,Stoichiometric calculation,,
-e-bioSNG,efficiency-hydrogen-fuel,1.0922,per unit,Stoichiometric calculation,,
+e-bioSNG,efficiency-hydrogen-fuel,1.0922,MWh_fuel/MWh_H2,Stoichiometric calculation,,
 e-bioSNG,efficiency-tot,0.67,per unit,Stoichiometric calculation,,
 e-bioSNG,investment,1781.8736,EUR/kW_th,combination of bioSNG and electrofuels,,2017.0
 e-biomethanol,C in fuel,0.9426,per unit,Stoichiometric calculation,,
@@ -859,9 +857,28 @@ e-biomethanol,VOM,18.0436,EUR/MWh_th,combination of biomass-to-methanol and elec
 e-biomethanol,capture rate,0.9,per unit,Assumption based on doi:10.1016/j.biombioe.2015.01.006,,
 e-biomethanol,efficiency-biomass,1.3926,per unit,Stoichiometric calculation,,
 e-biomethanol,efficiency-hydrogen-biomass,0.9216,per unit,Stoichiometric calculation,,
-e-biomethanol,efficiency-hydrogen-fuel,1.5111,per unit,Stoichiometric calculation,,
+e-biomethanol,efficiency-hydrogen-fuel,1.5111,MWh_methanol/MWh_H2,Stoichiometric calculation,,
 e-biomethanol,efficiency-tot,0.7247,per unit,Stoichiometric calculation,,
 e-biomethanol,investment,1875.7975,EUR/kW_th,combination of biomass-to-methanol and electrofuels,,2017.0
+biogas-to-methanol,C in fuel,0.6156,per unit,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
+biogas-to-methanol,C stored,0.3844,per unit,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
+biogas-to-methanol,CO2 stored,0.1265,tCO2/MWh_th,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
+biogas-to-methanol,FOM,0.83,%/year,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
+biogas-to-methanol,VOM,2.541270703,EUR/MWh_MeOH,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
+biogas-to-methanol,capture rate,0.9,per unit,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
+biogas-to-methanol,efficiency-biogas,0.660070995,per unit,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
+biogas-to-methanol,investment,3307.125,EUR/kW_MeOH,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
+biogas-to-methanol,lifetime,20.0,years,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
+e-biogas-methanol,C in fuel,0.8851,per unit,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
+e-biogas-methanol,FOM,0.83,%/year,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
+e-biogas-methanol,VOM,2.388040137,EUR/MWh_th,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
+e-biogas-methanol,capture rate,0.9,per unit,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
+e-biogas-methanol,efficiency-biogas,0.931889711,MWh_MeOH/MWh_biogas,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
+e-biogas-methanol,efficiency-hydrogen-biogas,0.523804247,MWh_H2/MWh_biogas,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
+e-biogas-methanol,efficiency-hydrogen-fuel,1.779075868,MWh_methanol/MWh_H2,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
+e-biogas-methanol,efficiency-tot,0.611554741,per unit,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
+e-biogas-methanol,investment,3165.6,EUR/kW_th,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
+e-biogas-methanol,lifetime,20.0,years,"Stoichiometric calculation, doi.org/10.1016/j.enconman.2025.120052",,
 electric arc furnace,FOM,30.0,%/year,"Model assumptions from MPP Steel Transition Tool: https://github.com/missionpossiblepartnership/mpp-steel-model/blob/9eca52db92bd2d9715f30e98ccaaf36677fdb516/mppsteel/data/import_data/CAPEX%20OPEX%20Per%20Technology.xlsx, accessed: 2022-12-05.","EAF has high OPEX of 62.99 EUR/year/t_steel, presumably because of electrode corrosion.",2020.0
 electric arc furnace,electricity-input,0.6395,MWh_el/t_steel,"Mission Possible Partnership (2022): Steel Model (https://github.com/missionpossiblepartnership/mpp-steel-model/blob/9eca52db92bd2d9715f30e98ccaaf36677fdb516/mppsteel/data/import_data/Technology%20Business%20Cases.csv, accessed: 2022-12-03).",Based on process ‘EAF’. ,2020.0
 electric arc furnace,hbi-input,1.0,t_hbi/t_steel,-,Assume HBI instead of scrap as input.Scrap would require higher input (in tonnes) as steel content is lower.,2020.0

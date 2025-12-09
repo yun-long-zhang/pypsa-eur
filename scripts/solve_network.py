@@ -295,6 +295,75 @@ def add_aviation_fuels_constraint(n):
     
     logger.info(f"Added aviation fossil fuel constraint: fossil production <= {aviation_fossil_limit:.2f}")
 
+def add_aviation_renewable_technology_constraint(n):
+    """
+    Add constraint to ensure minimum share of specific renewable technologies in aviation fuel production.
+    
+    Constraint: Fischer-Tropsch 2 + share_increase_1 * e-biomethanol 2 + share_increase_2 * electrobiofuels 2 + methanolisation 2 
+                + share_increase_3 * e-biogas-methanol 2 >= 0.5 * (green-methanol-to-kerosene + green-oil-to-kerosene)
+    
+    Parameters
+    ----------
+    n : pypsa.Network
+        The PyPSA network instance
+    """
+    
+    # Find renewable aviation fuel links (consumption side)
+    renewable_aviation_carriers = ["green-methanol-to-kerosene", "green-oil-to-kerosene"]
+    renewable_aviation_links = n.links.query('carrier.isin(@renewable_aviation_carriers)').index
+    
+    if renewable_aviation_links.empty:
+        logger.warning("No renewable aviation fuel links found. Skipping aviation renewable technology constraint.")
+        return
+    
+    print(f'Renewable aviation links found: {renewable_aviation_links}')
+    
+    # Define technology carriers and their coefficients
+    technology_carriers = {
+        "Fischer-Tropsch 2": 1.0,
+        "e-biomethanol 2": 0.54,  #0.5094/(0.4265+0.5094)=0.54
+        "electrobiofuels 2": 0.685, #0.637/(0.2922+0.637)=0.685
+        "methanolisation 2": 1.0,
+        "e-biogas-methanol 2": 0.304  #(0.8851-0.6156)/0.8851=0.304
+    }
+    
+    # Find technology links (production side)
+    technology_links = {}
+    for carrier, coeff in technology_carriers.items():
+        links = n.links.query('carrier == @carrier').index
+        if not links.empty:
+            technology_links[carrier] = (links, coeff)
+            print(f'Technology links for {carrier}: {links}')
+        else:
+            logger.warning(f"No links found for technology carrier: {carrier}")
+    
+    if not technology_links:
+        logger.warning("No technology links found. Skipping aviation renewable technology constraint.")
+        return
+    
+    # Get link flow variables
+    # Left-hand side: weighted sum of technology production
+    lhs_terms = []
+    for carrier, (links, coeff) in technology_links.items():
+        tech_vars = n.model["Link-p"].loc[:, links]
+        # Sum across all links of this technology and apply coefficient
+        weighted_sum = tech_vars.sum() * coeff
+        lhs_terms.append(weighted_sum)
+    
+    # Sum all technology contributions
+    lhs = sum(lhs_terms)
+    
+    # Right-hand side: 50% of renewable aviation fuel consumption
+    renewable_aviation_vars = n.model["Link-p"].loc[:, renewable_aviation_links]
+    rhs = 0.5 * renewable_aviation_vars.sum()
+    
+    print(f'Adding aviation renewable technology constraint: LHS >= 0.5 * RHS')
+    
+    # Add constraint: technology production >= 50% of renewable aviation fuel
+    n.model.add_constraints(lhs >= rhs, name='aviation_renewable_technology_mix')
+    
+    logger.info("Added aviation renewable technology constraint: technology mix >= 50% of renewable aviation fuel")
+
 def add_shipping_fuels_constraint(n):
     """
     Add constraint to limit shipping fossil fuel usage to maximum 20% of total shipping fuel demand.
@@ -1332,6 +1401,9 @@ def extra_functionality(
     if config["sector"].get("EU_liquid_fuel_policy", False):
         # Add aviation fossil fuel constraint (30% limit)
         add_aviation_fuels_constraint(n)
+        
+        # Add aviation renewable technology mix constraint
+        add_aviation_renewable_technology_constraint(n)
         
         # Add shipping fossil fuel constraint (20% limit)
         add_shipping_fuels_constraint(n)

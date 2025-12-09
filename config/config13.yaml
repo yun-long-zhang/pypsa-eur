@@ -23,7 +23,7 @@ run:
   #- test-elec-no-onshore-wind
   scenarios:
     enable: true
-    file: config/scenarios6.yaml
+    file: config/scenarios13.yaml
   disable_progressbar: true
   shared_resources:
     policy: true
@@ -83,7 +83,7 @@ co2_budget:
   2035: 0.250
   2040: 0.100 # 90% by 2040
   2045: 0.050
-  2050: 0.100
+  2050: 0.000
 
   # CO2 budget as a fraction of 1990 emissions  46Gt
 # this is over-ridden if CO2Lx is set in sector_opts
@@ -399,7 +399,7 @@ energy:
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#biomass
 biomass:
   year: 2040 #Year for which to retrieve biomass potential according to the assumptions of the JRC ENSPRESO .{2010, 2020, 2030, 2040, 2050}
-  scenario: ENS_Med #{“ENS_Low”, “ENS_Med”, “ENS_High”}
+  scenario: ENS_Low #{“ENS_Low”, “ENS_Med”, “ENS_High”}
   classes:
     solid biomass:
     - Agricultural waste
@@ -729,6 +729,7 @@ sector:
   biogas_transport_cost: 0.7 # €/MWh/km For biogas distribution via pipelines, costs are around 7 €/MWh for a 10 km distance.  doi:10.1080/17597269.2024.2318515.
   electrobiofuels: true
   e_bioSNG: true
+  
   EU_liquid_fuel_policy: false # whether to consider the EU liquid fuel policy for aviation
   oil_cracking: true
   co2_spatial: false  #Add option to spatially resolve carrier representing stored carbon dioxide. 
