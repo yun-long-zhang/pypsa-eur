@@ -1,0 +1,228 @@
+# -*- coding: utf-8 -*-
+# SPDX-FileCopyrightText: Contributors to PyPSA-Eur <https://github.com/pypsa/pypsa-eur>
+#
+# SPDX-License-Identifier: MIT
+
+# This file is used to define the scenarios that are run by snakemake. Each entry on the first level is a scenario. Each scenario can contain configuration overrides with respect to the config/config.yaml settings.
+#
+# Example
+#
+# custom-scenario: # name of the scenario
+#   electricity:
+#       renewable_carriers: [wind, solar] # override the list of renewable carriers
+
+8-no-nonetwork-H2100-200-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 200 
+    h2_electrolysis_limit:
+      max_production: 2100
+8-no-nonetwork-H2100-400-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 400 
+    h2_electrolysis_limit:
+      max_production: 2100
+8-no-nonetwork-H2100-600-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 600 
+    h2_electrolysis_limit:
+      max_production: 2100
+8-no-nonetwork-H2100-800-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 800 
+    h2_electrolysis_limit:
+      max_production: 2100
+8-no-nonetwork-H2100-1000-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 1000 
+    h2_electrolysis_limit:
+      max_production: 2100
+8-no-nonetwork-H1800-200-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 200 
+    h2_electrolysis_limit:
+      max_production: 1800
+8-no-nonetwork-H1800-400-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 400 
+    h2_electrolysis_limit:
+      max_production: 1800
+8-no-nonetwork-H1800-600-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 600 
+    h2_electrolysis_limit:
+      max_production: 1800
+8-no-nonetwork-H1800-800-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 800 
+    h2_electrolysis_limit:
+      max_production: 1800
+8-no-nonetwork-H1800-1000-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 1000 
+    h2_electrolysis_limit:
+      max_production: 1800
+
+8-no-nonetwork-H1500-200-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 200 
+    h2_electrolysis_limit:
+      max_production: 1500
+8-no-nonetwork-H1500-400-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 400 
+    h2_electrolysis_limit:
+      max_production: 1500
+8-no-nonetwork-H1500-600-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 600 
+    h2_electrolysis_limit:
+      max_production: 1500
+8-no-nonetwork-H1500-800-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 800 
+    h2_electrolysis_limit:
+      max_production: 1500
+8-no-nonetwork-H1500-1000-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 1000 
+    h2_electrolysis_limit:
+      max_production: 1500
+
+8-no-nonetwork-H1200-200-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 200 
+    h2_electrolysis_limit:
+      max_production: 1200
+8-no-nonetwork-H1200-400-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 400 
+    h2_electrolysis_limit:
+      max_production: 1200
+8-no-nonetwork-H1200-600-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 600 
+    h2_electrolysis_limit:
+      max_production: 1200
+8-no-nonetwork-H1200-800-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 800 
+    h2_electrolysis_limit:
+      max_production: 1200
+8-no-nonetwork-H1200-1000-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 1000 
+    h2_electrolysis_limit:
+      max_production: 1200
+
+8-no-nonetwork-H900-200-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 200 
+    h2_electrolysis_limit:
+      max_production: 900
+8-no-nonetwork-H900-400-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 400 
+    h2_electrolysis_limit:
+      max_production: 900
+8-no-nonetwork-H900-600-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 600 
+    h2_electrolysis_limit:
+      max_production: 900
+8-no-nonetwork-H900-800-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 800 
+    h2_electrolysis_limit:
+      max_production: 900
+8-no-nonetwork-H900-1000-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 1000 
+    h2_electrolysis_limit:
+      max_production: 900
+
+8-no-nonetwork-H600-200-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 200 
+    h2_electrolysis_limit:
+      max_production: 600
+8-no-nonetwork-H600-400-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 400 
+    h2_electrolysis_limit:
+      max_production: 600
+8-no-nonetwork-H600-600-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 600 
+    h2_electrolysis_limit:
+      max_production: 600
+8-no-nonetwork-H600-800-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 800 
+    h2_electrolysis_limit:
+      max_production: 600
+8-no-nonetwork-H600-1000-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 1000 
+    h2_electrolysis_limit:
+      max_production: 600
+
+8-no-nonetwork-H300-200-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 200 
+    h2_electrolysis_limit:
+      max_production: 300
+8-no-nonetwork-H300-400-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 400 
+    h2_electrolysis_limit:
+      max_production: 300
+8-no-nonetwork-H300-600-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 600 
+    h2_electrolysis_limit:
+      max_production: 300
+8-no-nonetwork-H300-800-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 800 
+    h2_electrolysis_limit:
+      max_production: 300
+8-no-nonetwork-H300-1000-nopolicy: 
+  sector:
+    co2_sequestration_potential:
+      2050: 1000 
+    h2_electrolysis_limit:
+      max_production: 300

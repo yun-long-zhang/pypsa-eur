@@ -4158,6 +4158,30 @@ def add_biomass(
             p_nom_extendable=True,
             marginal_cost=marginal_cost,
         )
+    if options["e_biogas_methanol"]:
+        nodes = pop_layout.index
+        n.add(
+            "Link",
+            spatial.gas.locations,
+            suffix=" e-biogas-methanol",
+            bus0=spatial.gas.biogas,
+            bus1=spatial.methanol.nodes,  # CHANGED
+            bus2=nodes + " buffer H2",
+            bus3="co2 atmosphere",
+            carrier="e-biogas-methanol",
+            lifetime=costs.at["e-biogas-methanol", "lifetime"],
+            efficiency=costs.at["e-biogas-methanol", "efficiency-biogas"],
+            efficiency2=-costs.at["e-biogas-methanol", "efficiency-hydrogen-biogas"],
+            efficiency3=-costs.at["biogas", "CO2 intensity"] + costs.at["biogas-to-methanol", "CO2 stored"] * (1 - costs.at["biogas-to-methanol", "capture rate"]),
+            p_nom_extendable=True,
+            capital_cost=costs.at["e-biogas-methanol", "capital_cost"]
+            * costs.at["e-biogas-methanol", "efficiency-biogas"] * (options.get("e_biofuels_cost_factor") or 1),   #https://doi.org/10.1016/j.enconman.2025.120052
+            marginal_cost = (
+                costs.loc["e-biogas-methanol", "VOM"] * costs.at["e-biogas-methanol", "efficiency-biogas"]
+                + (options.get("solid_biomass_transport_cost") or 0)
+            ),
+        )
+    
     if options["biomass_transport"]:
         # add biomass transport
         transport_costs = pd.read_csv(biomass_transport_costs_file, index_col=0)
@@ -6969,9 +6993,9 @@ def add_waste_heat(
                 0.95 - n.links.loc[idx1, "efficiency"]
             ) * options["use_methanolisation_waste_heat"]
 
-            n.links.loc[idx1, "bus3"] = urban_central + " urban central heat"
-            n.links.loc[idx1, "efficiency3"] = (
-                0.95 - n.links.loc[idx1, "efficiency"]
+            n.links.loc[idx2, "bus3"] = urban_central + " urban central heat"
+            n.links.loc[idx2, "efficiency3"] = (
+                0.95 - n.links.loc[idx2, "efficiency"]
             ) * options["use_methanolisation_waste_heat"]
 
         # Biogas to methanol CC waste heat
@@ -6983,9 +7007,9 @@ def add_waste_heat(
                 0.95 - n.links.loc[idx1, "efficiency"]
             ) * options["use_methanolisation_waste_heat"]
 
-            n.links.loc[idx1, "bus4"] = urban_central + " urban central heat"
-            n.links.loc[idx1, "efficiency4"] = (
-                0.95 - n.links.loc[idx1, "efficiency"]
+            n.links.loc[idx2, "bus4"] = urban_central + " urban central heat"
+            n.links.loc[idx2, "efficiency4"] = (
+                0.95 - n.links.loc[idx2, "efficiency"]
             ) * options["use_methanolisation_waste_heat"]
 
         # Biomass-to-methanol waste heat
