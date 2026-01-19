@@ -844,7 +844,7 @@ sector:
   solid_biomass_import:
     enable: true
     price: 54 #EUR/MWh
-    max_amount: 1390 # TWh
+    max_amount: 7000 # TWh
     upstream_emissions_factor: .0 #.1 #share of solid biomass CO2 emissions at full combustion Upstream emissions of solid biomass imports
   imports:
     enable: false
