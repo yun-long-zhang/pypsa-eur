@@ -490,6 +490,12 @@ if config["enable"]["retrieve"]:
             shcopy(input.zip, params.zip)
             unpack_archive(params.zip, params.folder)
 
+            # Extract {bYYYY} from the input file / URL
+            bYYYY = re.search(
+                r"WDPA_(\w{3}\d{4})_Public_shp.zip",
+                input["zip_file"],
+            ).group(1)
+
             for i in range(3):
                 # vsizip is special driver for directly working with zipped shapefiles in ogr2ogr
                 layer_path = (
@@ -515,6 +521,12 @@ if config["enable"]["retrieve"]:
         run:
             shcopy(input.zip, params.zip)
             unpack_archive(params.zip, params.folder)
+
+            # Extract {bYYYY} from the input file / URL
+            bYYYY = re.search(
+                r"WDPA_WDOECM_(\w{3}\d{4})_Public_marine_shp.zip",
+                input["zip_file"],
+            ).group(1)
 
             for i in range(3):
                 # vsizip is special driver for directly working with zipped shapefiles in ogr2ogr
