@@ -1304,27 +1304,29 @@ def add_import_limit_constraint(n: pypsa.Network, sns: pd.DatetimeIndex):
     n.model.add_constraints(lhs, limit_sense, rhs, name="import_limit")
 
 
-def add_h2_electrolysis_limit_constraint(n: pypsa.Network, sns: pd.DatetimeIndex):
+def add_h2_electrolysis_capacity_limit_constraint(n: pypsa.Network):
     """
-    Add constraint for limiting H2 electrolysis production.
+    Add constraint for limiting H2 electrolyzer capacity.
     
     Based on feasibility concerns (Odenweller et al.), this constraint
-    limits the total hydrogen production from electrolysis.
+    limits the total installed capacity of electrolyzers, reflecting
+    manufacturing capacity, supply chain, and deployment speed limitations.
     
     The constraint ensures:
-        Total H2 production from all electrolysis units <= max_production (TWh/year)
+        Total electrolyzer capacity <= max_capacity (GW)
     
     Parameters
     ----------
     n : pypsa.Network
         The PyPSA network instance
-    sns : pd.DatetimeIndex
-        Simulation timesteps
     
     Notes
     -----
-    The max_production parameter in config should be specified in TWh/year.
-    For example, max_production: 100 means 100 TWh of H2 per year.
+    The max_capacity parameter in config should be specified in GW.
+    For example, max_capacity: 50 means 50 GW of electrolyzer capacity.
+    This better represents industrial scale-up constraints compared to 
+    production limits, as it directly constrains manufacturing and 
+    installation capacity.
     """
     
     # Get configuration
@@ -1333,44 +1335,36 @@ def add_h2_electrolysis_limit_constraint(n: pypsa.Network, sns: pd.DatetimeIndex
     if not h2_config.get("enable", False):
         return
     
-    max_production = h2_config.get("max_production", np.inf)
+    max_capacity = h2_config.get("max_capacity", np.inf)  # in GW
     
-    if not np.isfinite(max_production):
-        logger.info("H2 electrolysis limit is not finite, skipping constraint.")
+    if not np.isfinite(max_capacity):
+        logger.info("H2 electrolyzer capacity limit is not finite, skipping constraint.")
         return
     
-    # Find H2 electrolysis links
+    # Find extendable H2 electrolysis links
     h2_electrolysis_links = n.links.loc[
         n.links.carrier.str.contains("H2 Electrolysis", case=False, na=False)
+        & n.links.p_nom_extendable
     ].index
     
     if h2_electrolysis_links.empty:
-        logger.warning("No H2 electrolysis links found. Skipping H2 electrolysis limit constraint.")
+        logger.warning("No extendable H2 electrolysis links found. Skipping H2 electrolyzer capacity limit constraint.")
         return
     
-    logger.info(f"Found {len(h2_electrolysis_links)} H2 electrolysis links")
+    logger.info(f"Found {len(h2_electrolysis_links)} extendable H2 electrolysis links")
     
-    # Calculate number of years represented in the simulation
-    nyears = n.snapshot_weightings.generators.sum() / 8760
-    weightings = n.snapshot_weightings.loc[sns, "generators"]
+    # Get capacity variables (MW)
+    p_nom = n.model["Link-p_nom"].loc[h2_electrolysis_links]
     
-    # Get link flow variables (MW)
-    p_links = n.model["Link-p"].loc[sns, h2_electrolysis_links]
+    # Calculate left-hand side: total electrolyzer capacity
+    lhs = p_nom.sum()
     
-    # Get efficiency to convert from electricity input to H2 output
-    eff = n.links.loc[h2_electrolysis_links, "efficiency"]
+    # Convert limit from GW to MW
+    rhs = max_capacity * 1e3
     
-    # Calculate total H2 production over simulation period
-    # p_links (MW) * eff (dimensionless) * weightings (hours) = MWh_H2
-    lhs = (p_links * eff * weightings).sum()
+    logger.info(f"Adding H2 electrolyzer capacity limit: {max_capacity} GW")
     
-    # Convert limit from TWh/year to MWh over simulation period
-    # max_production (TWh/year) * 1e6 (MWh/TWh) * nyears (years) = MWh
-    rhs = max_production * 1e6 * nyears
-    
-    logger.info(f"Adding H2 electrolysis production limit: {max_production} TWh/year (={max_production * nyears} TWh over {nyears:.2f} years)")
-    
-    n.model.add_constraints(lhs <= rhs, name="h2_electrolysis_limit")
+    n.model.add_constraints(lhs <= rhs, name="h2_electrolyzer_capacity_limit")
 
 
 def add_co2_atmosphere_constraint(n, snapshots):
@@ -1466,9 +1460,9 @@ def extra_functionality(
     if config["sector"]["imports"]["enable"]:
         add_import_limit_constraint(n, snapshots)
 
-    # Add H2 electrolysis production limit if enabled
+    # Add H2 electrolysis capacity limit if enabled
     if config["sector"].get("h2_electrolysis_limit", {}).get("enable", False):
-        add_h2_electrolysis_limit_constraint(n, snapshots)
+        add_h2_electrolysis_capacity_limit_constraint(n)
 
     # Add EU liquid fuel policy constraints if enabled
     if config["sector"].get("EU_liquid_fuel_policy", False):
