@@ -23,7 +23,7 @@ run:
   #- test-elec-no-onshore-wind
   scenarios:
     enable: true
-    file: config/scenarios32.yaml
+    file: config/scenarios34.yaml
   disable_progressbar: true
   shared_resources:
     policy: true
