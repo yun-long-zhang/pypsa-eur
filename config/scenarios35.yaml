@@ -12,65 +12,65 @@
 #       renewable_carriers: [wind, solar] # override the list of renewable carriers
 
 
-8-no-nonetwork-1390-H400-140-nopolicy: 
+8-no-nonetwork-1390-H1800-200-nopolicy: 
   sector:
     co2_sequestration_potential:
-      2050: 140
+      2050: 200
     h2_electrolysis_limit:
-      max_capacity: 400
+      max_capacity: 1800
 
-8-no-nonetwork-1390-H500-140-nopolicy: 
+8-no-nonetwork-1390-H2500-200-nopolicy: 
   sector:
     co2_sequestration_potential:
-      2050: 140
+      2050: 200
     h2_electrolysis_limit:
-      max_capacity: 500
+      max_capacity: 2500
       
-8-no-nonetwork-1390-H600-140-nopolicy: 
+8-no-nonetwork-1390-H3500-200-nopolicy: 
   sector:
     co2_sequestration_potential:
-      2050: 140
+      2050: 200
     h2_electrolysis_limit:
-      max_capacity: 600
+      max_capacity: 3500
 
-8-no-nonetwork-1390-H400-250-nopolicy: 
+8-no-nonetwork-1390-H1800-300-nopolicy: 
   sector:
     co2_sequestration_potential:
-      2050: 250
+      2050: 300
     h2_electrolysis_limit:
-      max_capacity: 400
+      max_capacity: 1800
 
-8-no-nonetwork-1390-H500-250-nopolicy: 
+8-no-nonetwork-1390-H2500-300-nopolicy: 
   sector:
     co2_sequestration_potential:
-      2050: 250
+      2050: 300
     h2_electrolysis_limit:
-      max_capacity: 500
+      max_capacity: 2500
       
-8-no-nonetwork-1390-H600-250-nopolicy: 
+8-no-nonetwork-1390-H3500-300-nopolicy: 
   sector:
     co2_sequestration_potential:
-      2050: 250
+      2050: 300
     h2_electrolysis_limit:
-      max_capacity: 600
+      max_capacity: 3500
 
-8-no-nonetwork-1390-H400-500-nopolicy: 
+8-no-nonetwork-1390-H1800-500-nopolicy: 
   sector:
     co2_sequestration_potential:
       2050: 500
     h2_electrolysis_limit:
-      max_capacity: 400
+      max_capacity: 1800
 
-8-no-nonetwork-1390-H500-500-nopolicy: 
+8-no-nonetwork-1390-H2500-500-nopolicy: 
   sector:
     co2_sequestration_potential:
       2050: 500
     h2_electrolysis_limit:
-      max_capacity: 500
+      max_capacity: 2500
       
-8-no-nonetwork-1390-H600-500-nopolicy: 
+8-no-nonetwork-1390-H3500-500-nopolicy: 
   sector:
     co2_sequestration_potential:
       2050: 500
     h2_electrolysis_limit:
-      max_capacity: 600
+      max_capacity: 3500
